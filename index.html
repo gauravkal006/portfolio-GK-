@@ -194,6 +194,17 @@
     .contact-band h2 { margin: .55rem 0 .55rem; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.1; letter-spacing: -.04em; }
     .contact-band p { max-width: 520px; margin: 0; color: var(--muted); }
     .contact-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .65rem; }
+    .resume-dialog { width: min(920px, calc(100% - 2rem)); max-width: none; max-height: 90dvh; padding: 0; overflow: hidden; border: 1px solid rgba(112, 240, 208, .4); border-radius: 4px; color: var(--text); background: var(--bg); box-shadow: 0 24px 100px rgba(0, 0, 0, .6); }
+    .resume-dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+    .resume-dialog::backdrop { background: rgba(0, 0, 0, .8); backdrop-filter: blur(6px); }
+    .resume-dialog-header { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 1rem; padding: .65rem 1rem .65rem 1.25rem; border-bottom: 1px solid var(--line); background: var(--surface); }
+    .resume-dialog-title { margin: 0; color: var(--cyan); font: .75rem var(--mono); text-transform: uppercase; }
+    .resume-dialog-actions { display: flex; align-items: center; gap: .8rem; }
+    .resume-new-tab { color: var(--muted); font-size: .8rem; }
+    .resume-new-tab:hover { color: var(--lime); }
+    .resume-close { display: grid; width: 40px; aspect-ratio: 1; place-items: center; border: 1px solid var(--line); color: var(--text); background: transparent; cursor: pointer; font-size: 1.35rem; line-height: 1; }
+    .resume-close:hover { border-color: var(--lime); color: var(--lime); }
+    .resume-pdf { display: block; width: 100%; height: min(78dvh, 820px); min-height: 320px; border: 0; background: #fff; }
     .site-footer { display: flex; min-height: 86px; align-items: center; justify-content: space-between; gap: 1rem; border-top: 1px solid rgba(155, 168, 158, .14); color: var(--muted); font-size: .8rem; }
     .footer-mark { color: var(--lime); font-family: var(--mono); }
     .reveal { opacity: 1; transform: none; }
@@ -235,6 +246,9 @@
       .all-projects { text-align: left; }
       .contact-band { grid-template-columns: 1fr; }
       .contact-actions { justify-content: flex-start; }
+      .resume-dialog { width: calc(100% - 1rem); }
+      .resume-dialog-header { padding-inline: .75rem; }
+      .resume-pdf { height: 78dvh; min-height: 260px; }
       .site-footer { align-items: flex-start; flex-direction: column; justify-content: center; padding-block: 1.2rem; }
       .facts { gap: .6rem; }
       .fact { padding: .8rem; }
@@ -371,7 +385,7 @@
           <div class="contact-actions">
             <a class="button secondary" href="https://github.com/gauravkal006" target="_blank" rel="noopener noreferrer">GitHub <span class="button-arrow" aria-hidden="true">↗</span></a>
             <a class="button secondary" href="https://www.linkedin.com/in/gaurav-k-137336237/" target="_blank" rel="noopener noreferrer">LinkedIn <span class="button-arrow" aria-hidden="true">↗</span></a>
-            <a class="button" href="./resume.pdf" target="_blank" rel="noopener noreferrer">View Resume <span class="button-arrow" aria-hidden="true">↗</span></a>
+            <button class="button" id="view-resume" type="button">View Resume <span class="button-arrow" aria-hidden="true">↗</span></button>
           </div>
         </div>
       </div>
@@ -382,6 +396,17 @@
     <p>© <span id="year"></span> Gaurav Kalamkhede</p>
     <p>Designed with intention. Built for every screen <span class="footer-mark" aria-hidden="true">✳</span></p>
   </footer>
+
+  <dialog class="resume-dialog" id="resume-dialog" aria-labelledby="resume-dialog-title">
+    <div class="resume-dialog-header">
+      <h2 class="resume-dialog-title" id="resume-dialog-title">Resume PDF</h2>
+      <div class="resume-dialog-actions">
+        <a class="resume-new-tab" href="./resume.pdf" target="_blank" rel="noopener noreferrer">Open in new tab <span aria-hidden="true">↗</span></a>
+        <button class="resume-close" id="close-resume" type="button" aria-label="Close resume">&times;</button>
+      </div>
+    </div>
+    <iframe class="resume-pdf" src="./resume.pdf" title="Gaurav Kalamkhede resume PDF"></iframe>
+  </dialog>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -496,6 +521,17 @@
         navLinks.classList.remove('is-open');
       }
     });
+
+    const resumeDialog = document.getElementById('resume-dialog');
+    const viewResumeButton = document.getElementById('view-resume');
+    const closeResumeButton = document.getElementById('close-resume');
+
+    viewResumeButton.addEventListener('click', () => resumeDialog.showModal());
+    closeResumeButton.addEventListener('click', () => resumeDialog.close());
+    resumeDialog.addEventListener('click', (event) => {
+      if (event.target === resumeDialog) resumeDialog.close();
+    });
+    resumeDialog.addEventListener('close', () => viewResumeButton.focus());
 
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
