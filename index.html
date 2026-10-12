@@ -100,7 +100,11 @@
     h1, h2, h3, p { margin-top: 0; }
     h1 { max-width: 720px; margin-bottom: 1.2rem; font-size: clamp(3.25rem, 8.5vw, 7.3rem); font-weight: 600; line-height: .98; letter-spacing: -.055em; }
     h1 span { color: var(--lime); }
-    .hero-title { margin-bottom: 1.25rem; color: var(--cyan); font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 500; }
+    .hero-title { min-height: 1.65em; margin-bottom: 1.25rem; color: var(--cyan); font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 500; white-space: nowrap; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .typed-role { color: var(--lime); }
+    .typing-cursor { display: inline-block; width: 2px; height: 1em; margin-left: .12em; transform: translateY(.1em); background: var(--cyan); animation: caret-blink .9s steps(2, end) infinite; }
+    @keyframes caret-blink { 50% { opacity: 0; } }
     .hero-copy { max-width: 560px; margin-bottom: 2rem; color: var(--muted); font-size: 1.05rem; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; }
     .button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: .6rem; padding: .65rem 1rem; border: 1px solid var(--lime); color: var(--bg); background: var(--lime); font-size: .9rem; font-weight: 700; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
@@ -205,6 +209,7 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
       .reveal { opacity: 1; transform: none; }
+      .typing-cursor { animation: none; }
     }
   </style>
 </head>
@@ -229,7 +234,7 @@
       <div class="hero-content reveal">
         <p class="eyebrow">Available for new opportunities</p>
         <h1 id="hero-title">Building for the <span>bright</span> side.</h1>
-        <p class="hero-title">Web Developer &amp; Creative Problem Solver</p>
+        <p class="hero-title"><span class="sr-only">Full-stack developer, AI/ML enthusiast, Java full-stack developer, and computer science engineer.</span><span class="typed-role" id="typed-role" aria-hidden="true">Full-Stack Developer</span><span class="typing-cursor" aria-hidden="true"></span></p>
         <p class="hero-copy">I turn ideas into clear, responsive web experiences. I care about thoughtful details, accessible design, and the little interactions that make a site feel alive.</p>
         <div class="hero-actions">
           <a class="button" href="#projects">Explore projects <span class="button-arrow" aria-hidden="true">↓</span></a>
@@ -331,6 +336,44 @@
           repeat: -1,
           yoyo: true
         });
+
+        const roleElement = document.querySelector('#typed-role');
+        const roles = [
+          'Full-Stack Developer',
+          'AI/ML Enthusiast',
+          'Java Full-Stack Developer',
+          'Computer Science Engineer'
+        ];
+
+        const cycleRole = (currentIndex) => {
+          const currentRole = roleElement.textContent;
+          const nextIndex = (currentIndex + 1) % roles.length;
+          const eraseProgress = { value: currentRole.length };
+
+          gsap.to(eraseProgress, {
+            value: 0,
+            duration: Math.max(0.25, currentRole.length * 0.02),
+            ease: 'none',
+            onUpdate: () => {
+              roleElement.textContent = currentRole.slice(0, Math.ceil(eraseProgress.value));
+            },
+            onComplete: () => {
+              const nextRole = roles[nextIndex];
+              const typeProgress = { value: 0 };
+              gsap.to(typeProgress, {
+                value: nextRole.length,
+                duration: Math.max(0.45, nextRole.length * 0.04),
+                ease: 'none',
+                onUpdate: () => {
+                  roleElement.textContent = nextRole.slice(0, Math.ceil(typeProgress.value));
+                },
+                onComplete: () => gsap.delayedCall(1.5, () => cycleRole(nextIndex))
+              });
+            }
+          });
+        };
+
+        gsap.delayedCall(1.5, () => cycleRole(0));
 
         gsap.utils.toArray('.reveal').forEach((element) => {
           gsap.fromTo(element, { autoAlpha: 0, y: 18 }, {
