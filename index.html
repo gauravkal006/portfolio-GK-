@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080c0b">
-  <meta name="description" content="Gaurav Kalamkhede builds thoughtful, responsive digital experiences.">
+  <meta name="description" content="Gaurav Kalamkhede is a Computer Science and Engineering student building practical software, AI, and web projects.">
   <title>Gaurav Kalamkhede | Web Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -143,6 +143,16 @@
     .tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; }
     .tag { color: #b8c5ba; font: .68rem var(--mono); }
     .tag + .tag::before { padding-inline: .4rem; color: #58645b; content: "/"; }
+    .project-tools { display: flex; flex-wrap: wrap; gap: .55rem; margin-bottom: 1.25rem; }
+    .filter-button { min-height: 40px; padding: .45rem .8rem; border: 1px solid var(--line); color: var(--muted); background: transparent; cursor: pointer; font-size: .82rem; transition: color .2s ease, border-color .2s ease, background .2s ease; }
+    .filter-button:hover, .filter-button[aria-pressed="true"] { border-color: var(--lime); color: var(--lime); background: rgba(200, 255, 95, .06); }
+    .project-card { min-width: 0; }
+    .project-number { line-height: 1.5; }
+    .project-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; }
+    .project-link { color: var(--lime); font-size: .82rem; font-weight: 600; }
+    .project-link:hover { color: var(--cyan); }
+    .all-projects { margin: 1.25rem 0 0; text-align: right; }
+    .all-projects a { color: var(--cyan); font-size: .88rem; }
 
     .contact-band { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2rem; padding: clamp(1.5rem, 5vw, 3rem); border: 1px solid rgba(112, 240, 208, .28); background: linear-gradient(115deg, rgba(112, 240, 208, .07), rgba(200, 255, 95, .035) 60%, transparent); }
     .contact-band h2 { margin: .55rem 0 .55rem; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.1; letter-spacing: -.04em; }
@@ -185,6 +195,7 @@
       .section-heading { align-items: start; flex-direction: column; gap: .6rem; }
       .project-grid { grid-template-columns: 1fr; }
       .project-card { min-height: 280px; }
+      .all-projects { text-align: left; }
       .contact-band { grid-template-columns: 1fr; }
       .contact-band .button { justify-self: start; }
       .site-footer { align-items: flex-start; flex-direction: column; justify-content: center; padding-block: 1.2rem; }
@@ -236,14 +247,14 @@
         <div class="reveal">
           <p class="section-kicker">01 / A little about me</p>
           <h2>Curious by nature.<br>Builder by choice.</h2>
-          <p class="about-copy">I'm Gaurav, a developer who enjoys shaping useful ideas into polished web experiences. I like learning by making, solving the small details that improve usability, and building interfaces that work just as well on a phone as they do on a desktop.</p>
-          <p class="about-copy"><strong>My focus:</strong> clean front-end foundations, responsive layouts, and accessible interactions.</p>
+          <p class="about-copy">I'm Gaurav, a Computer Science and Engineering student interested in software development, AI/ML, and problem-solving. I enjoy building practical projects that bring together AI, web technologies, and databases to solve real problems.</p>
+          <p class="about-copy"><strong>What I'm exploring:</strong> document intelligence, full-stack applications, and useful user experiences.</p>
         </div>
         <div class="facts reveal" aria-label="Areas of focus">
-          <div class="fact"><span>Based in</span><strong>India</strong></div>
-          <div class="fact"><span>Focus</span><strong>Front-end</strong></div>
-          <div class="fact"><span>Approach</span><strong>Learn by building</strong></div>
-          <div class="fact"><span>Currently</span><strong>Always curious</strong></div>
+          <div class="fact"><span>Studying</span><strong>Computer Science &amp; Engineering</strong></div>
+          <div class="fact"><span>Interests</span><strong>Software &amp; AI/ML</strong></div>
+          <div class="fact"><span>Building</span><strong>DocBlendAI</strong></div>
+          <div class="fact"><span>Learning</span><strong>Spring Boot &amp; Docker</strong></div>
         </div>
       </div>
     </section>
@@ -263,32 +274,13 @@
     <section class="section" id="projects">
       <div class="container">
         <div class="section-heading reveal">
-          <div><p class="section-kicker">03 / Selected work</p><h2>Projects in progress</h2></div>
-          <p class="section-note">A few directions I enjoy exploring through front-end projects and hands-on practice.</p>
+          <div><p class="section-kicker">03 / Selected work</p><h2>Projects from GitHub</h2></div>
+          <p class="section-note">A selection of real projects from my public repositories, with links to the source and live demos where available.</p>
         </div>
-        <div class="project-grid">
-          <article class="project-card reveal">
-            <div class="project-visual" aria-hidden="true"><span>01</span></div>
-            <span class="project-number">WEB / PORTFOLIO</span>
-            <h3>Personal Portfolio</h3>
-            <p>A responsive home for selected work, built around clear navigation, accessible details, and a distinctive visual style.</p>
-            <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span></div>
-          </article>
-          <article class="project-card reveal">
-            <div class="project-visual" aria-hidden="true"><span>02</span></div>
-            <span class="project-number">WEB / DATA</span>
-            <h3>Insight Dashboard</h3>
-            <p>A clean dashboard concept for turning everyday information into a focused, easy-to-scan interface.</p>
-            <div class="tags"><span class="tag">React</span><span class="tag">CSS</span><span class="tag">UI</span></div>
-          </article>
-          <article class="project-card reveal">
-            <div class="project-visual" aria-hidden="true"><span>03</span></div>
-            <span class="project-number">WEB / PRODUCTIVITY</span>
-            <h3>Task Flow</h3>
-            <p>A lightweight task manager concept exploring useful defaults, responsive layouts, and simple interactions.</p>
-            <div class="tags"><span class="tag">JavaScript</span><span class="tag">Tailwind</span><span class="tag">UX</span></div>
-          </article>
+        <div id="github-projects" aria-live="polite">
+          <p class="section-note">Loading projects from GitHub…</p>
         </div>
+        <p class="all-projects"><a href="https://github.com/gauravkal006?tab=repositories" target="_blank" rel="noopener noreferrer">Browse all public repositories <span aria-hidden="true">↗</span></a></p>
       </div>
     </section>
 
@@ -296,7 +288,7 @@
       <div class="container">
         <div class="contact-band reveal">
           <div><p class="section-kicker">04 / Your turn</p><h2>Have something in mind?</h2><p>I'm always glad to talk about ideas, collaborations, and opportunities to build something useful.</p></div>
-          <a class="button" href="mailto:hello@gauravkalamkhede.in">Say hello <span class="button-arrow" aria-hidden="true">↗</span></a>
+          <a class="button" href="https://github.com/gauravkal006" target="_blank" rel="noopener noreferrer">Connect on GitHub <span class="button-arrow" aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
@@ -342,5 +334,9 @@
       document.querySelectorAll('.reveal').forEach((element) => element.classList.add('is-visible'));
     }
   </script>
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./projects.jsx"></script>
 </body>
 </html>
