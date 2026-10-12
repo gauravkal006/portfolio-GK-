@@ -140,3 +140,4 @@ function ProjectGallery() {
 }
 
 ReactDOM.createRoot(document.getElementById("github-projects")).render(<ProjectGallery />);
+if (window.initProjectMotion) requestAnimationFrame(window.initProjectMotion);
