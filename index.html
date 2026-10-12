@@ -27,7 +27,7 @@
       "jobTitle": "Computer Science and Engineering Student",
       "description": "Full-stack developer and AI/ML enthusiast building practical software and web projects.",
       "knowsAbout": ["Full-stack development", "Java", "Artificial intelligence", "Machine learning", "Web development"],
-      "sameAs": ["https://github.com/gauravkal006"]
+      "sameAs": ["https://github.com/gauravkal006", "https://www.linkedin.com/in/gaurav-k-137336237/"]
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -193,6 +193,7 @@
     .contact-band { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2rem; padding: clamp(1.5rem, 5vw, 3rem); border: 1px solid rgba(112, 240, 208, .28); background: linear-gradient(115deg, rgba(112, 240, 208, .07), rgba(200, 255, 95, .035) 60%, transparent); }
     .contact-band h2 { margin: .55rem 0 .55rem; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.1; letter-spacing: -.04em; }
     .contact-band p { max-width: 520px; margin: 0; color: var(--muted); }
+    .contact-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .65rem; }
     .site-footer { display: flex; min-height: 86px; align-items: center; justify-content: space-between; gap: 1rem; border-top: 1px solid rgba(155, 168, 158, .14); color: var(--muted); font-size: .8rem; }
     .footer-mark { color: var(--lime); font-family: var(--mono); }
     .reveal { opacity: 1; transform: none; }
@@ -233,7 +234,7 @@
       .project-card { min-height: 280px; }
       .all-projects { text-align: left; }
       .contact-band { grid-template-columns: 1fr; }
-      .contact-band .button { justify-self: start; }
+      .contact-actions { justify-content: flex-start; }
       .site-footer { align-items: flex-start; flex-direction: column; justify-content: center; padding-block: 1.2rem; }
       .facts { gap: .6rem; }
       .fact { padding: .8rem; }
@@ -367,7 +368,11 @@
       <div class="container">
         <div class="contact-band reveal">
           <div><p class="section-kicker">05 / Your turn</p><h2>Have something in mind?</h2><p>I'm always glad to talk about ideas, collaborations, and opportunities to build something useful.</p></div>
-          <a class="button" href="https://github.com/gauravkal006" target="_blank" rel="noopener noreferrer">Connect on GitHub <span class="button-arrow" aria-hidden="true">↗</span></a>
+          <div class="contact-actions">
+            <a class="button secondary" href="https://github.com/gauravkal006" target="_blank" rel="noopener noreferrer">GitHub <span class="button-arrow" aria-hidden="true">↗</span></a>
+            <a class="button secondary" href="https://www.linkedin.com/in/gaurav-k-137336237/" target="_blank" rel="noopener noreferrer">LinkedIn <span class="button-arrow" aria-hidden="true">↗</span></a>
+            <a class="button" href="./resume.pdf" target="_blank" rel="noopener noreferrer">View Resume <span class="button-arrow" aria-hidden="true">↗</span></a>
+          </div>
         </div>
       </div>
     </section>
