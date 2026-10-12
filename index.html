@@ -132,6 +132,13 @@
     .fact { padding: 1rem; border: 1px solid var(--line); background: rgba(16, 23, 21, .72); }
     .fact span { display: block; color: var(--muted); font: .68rem var(--mono); text-transform: uppercase; }
     .fact strong { display: block; margin-top: .3rem; font-size: .95rem; font-weight: 500; }
+    .profile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .profile-card { min-width: 0; padding: 1.35rem; border: 1px solid var(--line); background: rgba(16, 23, 21, .76); }
+    .profile-card h3 { margin: .45rem 0 1rem; font-size: 1.25rem; }
+    .profile-entry + .profile-entry { margin-top: .8rem; padding-top: .8rem; border-top: 1px solid rgba(155, 168, 158, .14); }
+    .profile-entry span { display: block; color: var(--muted); font: .68rem var(--mono); text-transform: uppercase; }
+    .profile-entry strong { display: block; margin-top: .25rem; font-size: .9rem; font-weight: 500; overflow-wrap: anywhere; }
+    .profile-entry .profile-placeholder { color: #829087; font-weight: 400; font-style: italic; }
 
     .skill-list { display: flex; flex-wrap: wrap; gap: .65rem; }
     .skill { padding: .55rem .8rem; border: 1px solid var(--line); color: #c9d4cb; background: rgba(16, 23, 21, .7); font: .78rem var(--mono); transition: border-color .2s ease, color .2s ease, transform .2s ease; }
@@ -198,6 +205,7 @@
       .hero-copy { font-size: .98rem; }
       .section-heading { align-items: start; flex-direction: column; gap: .6rem; }
       .project-grid { grid-template-columns: 1fr; }
+      .profile-grid { grid-template-columns: 1fr; }
       .project-card { min-height: 280px; }
       .all-projects { text-align: left; }
       .contact-band { grid-template-columns: 1fr; }
@@ -222,6 +230,7 @@
       <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links"><span class="menu-icon" aria-hidden="true"></span></button>
       <div class="nav-links" id="nav-links">
         <a href="#about">About</a>
+        <a href="#background">Background</a>
         <a href="#skills">Skills</a>
         <a href="#projects">Projects</a>
         <a class="nav-cta" href="#contact">Get in touch <span aria-hidden="true">↗</span></a>
@@ -265,10 +274,49 @@
       </div>
     </section>
 
+    <section class="section" id="background">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div><p class="section-kicker">02 / Your background</p><h2>Education &amp; experience</h2></div>
+          <p class="section-note">Education, work, and the milestones behind the projects.</p>
+        </div>
+        <div class="profile-grid">
+          <article class="profile-card reveal">
+            <p class="section-kicker">LEARNING</p>
+            <h3>Education</h3>
+            <div class="profile-entry"><span>Degree or program</span><strong class="profile-placeholder">Add your degree or program</strong></div>
+            <div class="profile-entry"><span>Institution</span><strong class="profile-placeholder">Add your school or university</strong></div>
+            <div class="profile-entry"><span>Dates</span><strong class="profile-placeholder">Add your study dates</strong></div>
+          </article>
+          <article class="profile-card reveal">
+            <p class="section-kicker">WORK</p>
+            <h3>Experience</h3>
+            <div class="profile-entry"><span>Role</span><strong class="profile-placeholder">Add your job title or internship</strong></div>
+            <div class="profile-entry"><span>Organization</span><strong class="profile-placeholder">Add the company or team</strong></div>
+            <div class="profile-entry"><span>Dates and highlights</span><strong class="profile-placeholder">Add dates and a key contribution</strong></div>
+          </article>
+          <article class="profile-card reveal">
+            <p class="section-kicker">CREDENTIALS</p>
+            <h3>Certifications</h3>
+            <div class="profile-entry"><span>Certification</span><strong class="profile-placeholder">Add a course or certification</strong></div>
+            <div class="profile-entry"><span>Issuer</span><strong class="profile-placeholder">Add the issuing organization</strong></div>
+            <div class="profile-entry"><span>Year</span><strong class="profile-placeholder">Add the completion year</strong></div>
+          </article>
+          <article class="profile-card reveal">
+            <p class="section-kicker">HIGHLIGHTS</p>
+            <h3>Achievements</h3>
+            <div class="profile-entry"><span>Recognition</span><strong class="profile-placeholder">Add an award or achievement</strong></div>
+            <div class="profile-entry"><span>Organization</span><strong class="profile-placeholder">Add the event or organization</strong></div>
+            <div class="profile-entry"><span>Year</span><strong class="profile-placeholder">Add the year</strong></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="skills">
       <div class="container reveal">
         <div class="section-heading">
-          <div><p class="section-kicker">02 / Tools of the trade</p><h2>Skills &amp; toolkit</h2></div>
+          <div><p class="section-kicker">03 / Tools of the trade</p><h2>Skills &amp; toolkit</h2></div>
           <p class="section-note">A growing toolkit for building accessible, responsive experiences from the first sketch to the final interaction.</p>
         </div>
         <div class="skill-list" aria-label="Skills">
@@ -280,7 +328,7 @@
     <section class="section" id="projects">
       <div class="container">
         <div class="section-heading reveal">
-          <div><p class="section-kicker">03 / Selected work</p><h2>Projects from GitHub</h2></div>
+          <div><p class="section-kicker">04 / Selected work</p><h2>Projects from GitHub</h2></div>
           <p class="section-note">A selection of real projects from my public repositories, with links to the source and live demos where available.</p>
         </div>
         <div id="github-projects" aria-live="polite">
@@ -293,7 +341,7 @@
     <section class="section" id="contact">
       <div class="container">
         <div class="contact-band reveal">
-          <div><p class="section-kicker">04 / Your turn</p><h2>Have something in mind?</h2><p>I'm always glad to talk about ideas, collaborations, and opportunities to build something useful.</p></div>
+          <div><p class="section-kicker">05 / Your turn</p><h2>Have something in mind?</h2><p>I'm always glad to talk about ideas, collaborations, and opportunities to build something useful.</p></div>
           <a class="button" href="https://github.com/gauravkal006" target="_blank" rel="noopener noreferrer">Connect on GitHub <span class="button-arrow" aria-hidden="true">↗</span></a>
         </div>
       </div>
