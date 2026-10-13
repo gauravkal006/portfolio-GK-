@@ -1,9 +1,10 @@
 import type { ProjectCategory, ProjectMotif } from "../data/projects";
 
+// Theme-aware tints (defined in index.css) so the art adapts to light and dark mode.
 const tint: Record<ProjectCategory, string> = {
-  "Full stack": "#5ee0ff",
-  "AI & ML": "#9d8cff",
-  "Web experience": "#c8ff5f",
+  "Full stack": "var(--art-tint-fs)",
+  "AI & ML": "var(--art-tint-ai)",
+  "Web experience": "var(--art-tint-web)",
 };
 
 type Props = { motif: ProjectMotif; category: ProjectCategory; name: string };
@@ -19,24 +20,24 @@ export function ProjectArt({ motif, category, name }: Props) {
     <svg viewBox="0 0 400 225" className="h-full w-full" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
       <defs>
         <radialGradient id={`${id}-glow`} cx="50%" cy="55%" r="65%">
-          <stop offset="0" stopColor={c} stopOpacity="0.16" />
-          <stop offset="1" stopColor={c} stopOpacity="0" />
+          <stop offset="0" style={{ stopColor: c }} stopOpacity="0.16" />
+          <stop offset="1" style={{ stopColor: c }} stopOpacity="0" />
         </radialGradient>
         <pattern id={`${id}-dots`} width="16" height="16" patternUnits="userSpaceOnUse">
-          <circle cx="1" cy="1" r="1" fill="#fff" fillOpacity="0.07" />
+          <circle cx="1" cy="1" r="1" style={{ fill: "var(--art-dot)" }} />
         </pattern>
       </defs>
-      <rect width="400" height="225" fill="#0d0f13" />
+      <rect width="400" height="225" style={{ fill: "var(--art-bg)" }} />
       <rect width="400" height="225" fill={`url(#${id}-dots)`} />
       <rect width="400" height="225" fill={`url(#${id}-glow)`} />
-      <g fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <g fill="none" style={{ stroke: c }} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         {motifs[motif](c)}
       </g>
     </svg>
   );
 }
 
-const soft = (c: string, o = 0.12) => ({ fill: c, fillOpacity: o });
+const soft = (c: string, o = 0.12) => ({ style: { fill: c, fillOpacity: o } });
 
 const motifs: Record<ProjectMotif, (c: string) => React.ReactNode> = {
   cloud: (c) => (
@@ -88,7 +89,7 @@ const motifs: Record<ProjectMotif, (c: string) => React.ReactNode> = {
       <circle cx="200" cy="98" r="22" {...soft(c, 0.08)} />
       <path d="M164 152c6-18 20-26 36-26s30 8 36 26" />
       <path d="M126 64h22v22M274 64h-22v22M126 152h22v-22M274 152h-22v-22" strokeWidth="2" strokeOpacity="0.7" />
-      <circle cx="276" cy="186" r="5" fill={c} stroke="none" />
+      <circle cx="276" cy="186" r="5" style={{ fill: c }} stroke="none" />
       <path d="M190 186h76" strokeOpacity="0.4" />
     </>
   ),
@@ -110,8 +111,8 @@ const motifs: Record<ProjectMotif, (c: string) => React.ReactNode> = {
         </g>
       ))}
       <path d="M300 92h10l12 52h-48l-6-32h50" strokeWidth="2" />
-      <circle cx="282" cy="154" r="4" fill={c} stroke="none" />
-      <circle cx="312" cy="154" r="4" fill={c} stroke="none" />
+      <circle cx="282" cy="154" r="4" style={{ fill: c }} stroke="none" />
+      <circle cx="312" cy="154" r="4" style={{ fill: c }} stroke="none" />
     </>
   ),
   weather: (c) => (
@@ -120,7 +121,7 @@ const motifs: Record<ProjectMotif, (c: string) => React.ReactNode> = {
       {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => (
         <path key={a} d="M178 52v-10" transform={`rotate(${a} 178 92)`} strokeOpacity="0.6" />
       ))}
-      <path d="M190 150a24 24 0 0 1 44-14 20 20 0 0 1 30 18 16 16 0 0 1-4 32h-66a20 20 0 0 1-4-36z" fill="#0d0f13" strokeWidth="2" />
+      <path d="M190 150a24 24 0 0 1 44-14 20 20 0 0 1 30 18 16 16 0 0 1-4 32h-66a20 20 0 0 1-4-36z" style={{ fill: "var(--art-bg)" }} strokeWidth="2" />
       <path d="M104 196h56M240 196h56" strokeOpacity="0.3" />
     </>
   ),

@@ -8,6 +8,7 @@ import { Footer } from "./components/Footer";
 import { GitHubActivity } from "./components/GitHubActivity";
 import { HeroSection } from "./components/HeroSection";
 import { Navbar } from "./components/Navbar";
+import { Preloader } from "./components/Preloader";
 import { ResumeSection } from "./components/ResumeSection";
 import { ScrollProgress } from "./components/ScrollProgress";
 import { SkillsSection } from "./components/SkillsSection";
@@ -21,6 +22,7 @@ export default function App() {
       >
         Skip to content
       </a>
+      <Preloader />
       <ScrollProgress />
       <AnimatedBackground />
       <Navbar />

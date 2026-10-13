@@ -106,7 +106,7 @@ export function FeaturedProjects() {
                   {project.highlights && (
                     <ul className="mt-5 space-y-2.5">
                       {project.highlights.map((h) => (
-                        <li key={h} className="flex gap-3 text-[0.92rem] leading-relaxed text-[#c3c9d1]">
+                        <li key={h} className="flex gap-3 text-[0.92rem] leading-relaxed text-ink/80">
                           <Check size={16} className="mt-1 shrink-0 text-accent" aria-hidden="true" />
                           {h}
                         </li>

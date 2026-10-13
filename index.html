@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0b0d">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="dark light">
   <meta name="author" content="Gaurav Kalamkhede">
   <meta name="description" content="Gaurav Kalamkhede is a Computer Science Engineering student and full-stack developer building Java, React, cloud, and AI/ML projects.">
   <meta name="robots" content="index,follow,max-image-preview:large">
@@ -18,6 +18,16 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Gaurav Kalamkhede | Full-Stack Developer &amp; AI/ML Enthusiast">
   <meta name="twitter:description" content="Computer Science Engineering student building practical full-stack, Java, cloud, and AI/ML projects.">
+  <script>
+    // Apply the saved theme (or the system preference) before first paint to avoid a flash.
+    (function () {
+      var t;
+      try { t = localStorage.getItem("theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      document.documentElement.dataset.theme = t;
+      if (t === "light") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#f6f7f9");
+    })();
+  </script>
   <title>Gaurav Kalamkhede | Full-Stack Developer &amp; AI/ML Enthusiast</title>
   <script type="application/ld+json">
     {

@@ -132,7 +132,7 @@ export function ResumeSection() {
             </button>
           </div>
         </div>
-        {previewed && <iframe src={`${profile.resume}#view=FitH`} title="Gaurav Kalamkhede resume (PDF)" className="h-full w-full border-0 bg-white" />}
+        {previewed && <iframe src={`${profile.resume}#view=FitH`} title="Gaurav Kalamkhede resume (PDF)" className="h-full w-full border-0 bg-[#fff]" />}
       </dialog>
     </section>
   );

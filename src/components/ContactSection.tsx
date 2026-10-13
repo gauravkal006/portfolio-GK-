@@ -3,6 +3,7 @@ import { ArrowUpRight, Check, Copy, Mail, MapPin, Send } from "lucide-react";
 import { profile } from "../data/profile";
 import { useSectionReveal } from "../hooks/useSectionReveal";
 import { GitHubIcon, LinkedInIcon } from "./BrandIcons";
+import { CodingProfiles } from "./CodingProfiles";
 
 type Fields = { name: string; subject: string; message: string };
 type Errors = Partial<Record<keyof Fields, string>>;
@@ -94,6 +95,11 @@ export function ContactSection() {
                 ))}
               </ul>
 
+              <div className="mt-6">
+                <p className="mb-2.5 font-mono text-[0.7rem] tracking-[0.08em] text-subtle uppercase">Coding profiles</p>
+                <CodingProfiles />
+              </div>
+
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
                 <button type="button" onClick={copyEmail} className="inline-flex min-h-10 items-center gap-2 transition-colors hover:text-ink">
                   {copied ? <Check size={15} className="text-lime" aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
@@ -146,7 +152,7 @@ function Field({ id, label, error, children }: { id: string; label: string; erro
     <div>
       <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-ink/90">{label}</label>
       {children}
-      {error && <p id={`${id}-error`} className="mt-1.5 text-sm text-[#ff9b9b]">{error}</p>}
+      {error && <p id={`${id}-error`} className="mt-1.5 text-sm text-danger">{error}</p>}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { Download, Menu, X } from "lucide-react";
 import { navItems, profile } from "../data/profile";
 import { useActiveSection } from "../hooks/useActiveSection";
 import { GitHubIcon, LinkedInIcon } from "./BrandIcons";
+import { ThemeToggle } from "./ThemeToggle";
 
 const sectionIds = navItems.map((item) => item.id);
 
@@ -102,6 +103,7 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <a
             href={profile.github}
             target="_blank"

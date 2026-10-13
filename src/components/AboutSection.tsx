@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { BookOpen, GraduationCap, MapPin, Sparkles } from "lucide-react";
+import { CodeCard } from "./CodeCard";
 import { useSectionReveal } from "../hooks/useSectionReveal";
 import { spotlightMove } from "../lib/spotlight";
 import { SectionHeading } from "./SectionHeading";
@@ -25,7 +26,11 @@ export function AboutSection() {
           title={<>Curious by nature.<br className="hidden sm:block" /> <span className="text-muted">Builder by choice.</span></>}
         />
 
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
+          <div data-reveal className="order-last lg:order-none">
+            <CodeCard />
+          </div>
+
           <div data-reveal className="space-y-5 text-[1.05rem] leading-[1.8] text-muted">
             <p>
               I'm <strong className="font-medium text-ink">Gaurav</strong>, a Computer Science Engineering student at Prof. Ram Meghe
@@ -44,18 +49,18 @@ export function AboutSection() {
               I'm always glad to talk about ideas, collaborations and opportunities to build something useful.
             </p>
           </div>
-
-          <ul data-stagger className="grid gap-3 sm:grid-cols-2" aria-label="Quick facts">
-            {facts.map(({ icon: Icon, label, value, sub }) => (
-              <li key={label} onPointerMove={spotlightMove} className="panel spotlight p-5 transition-colors hover:border-line-strong">
-                <Icon size={18} className="text-accent" aria-hidden="true" />
-                <p className="mt-4 font-mono text-[0.7rem] tracking-[0.08em] text-subtle uppercase">{label}</p>
-                <p className="mt-1 font-display text-[1.05rem] leading-snug font-medium text-ink">{value}</p>
-                <p className="mt-1.5 text-sm text-muted">{sub}</p>
-              </li>
-            ))}
-          </ul>
         </div>
+
+        <ul data-stagger className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label="Quick facts">
+          {facts.map(({ icon: Icon, label, value, sub }) => (
+            <li key={label} onPointerMove={spotlightMove} className="panel spotlight p-5 transition-colors hover:border-line-strong">
+              <Icon size={18} className="text-accent" aria-hidden="true" />
+              <p className="mt-4 font-mono text-[0.7rem] tracking-[0.08em] text-subtle uppercase">{label}</p>
+              <p className="mt-1 font-display text-[1.05rem] leading-snug font-medium text-ink">{value}</p>
+              <p className="mt-1.5 text-sm text-muted">{sub}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

@@ -12,12 +12,57 @@
   --color-accent: #5ee0ff;
   --color-accent-2: #9d8cff;
   --color-lime: #c8ff5f;
+  --color-on-accent: #041218;
+  --color-accent-hover: #8ae9ff;
+  --color-chip: #c6ccd4;
+  --color-danger: #ff9b9b;
+  --color-field: rgb(0 0 0 / 0.25);
+  --color-grid: rgb(255 255 255 / 0.035);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Light theme. Darker ink and accents keep body text at ~7:1 and accents at 4.5:1+ on the
+   light background. `--color-white` is the overlay tint used by bg-white/* utilities, so it
+   flips to near-black to keep subtle surfaces and hovers visible. */
+:root {
+  color-scheme: dark;
+  /* Project cover art palette (see ProjectArt.tsx). */
+  --art-bg: #0d0f13;
+  --art-dot: rgb(255 255 255 / 0.07);
+  --art-tint-fs: #5ee0ff;
+  --art-tint-ai: #9d8cff;
+  --art-tint-web: #c8ff5f;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef1f5;
+  --color-line: rgb(15 23 42 / 0.09);
+  --color-line-strong: rgb(15 23 42 / 0.17);
+  --color-ink: #0e1116;
+  --color-muted: #475162;
+  --color-subtle: #677284;
+  --color-accent: #0073a0;
+  --color-accent-2: #5b3fd9;
+  --color-lime: #4a7a0c;
+  --color-on-accent: #ffffff;
+  --color-accent-hover: #00658c;
+  --color-chip: #344054;
+  --color-danger: #c62828;
+  --color-field: #ffffff;
+  --color-grid: rgb(15 23 42 / 0.05);
+  --color-white: #0f172a;
+  --art-bg: #edf1f6;
+  --art-dot: rgb(15 23 42 / 0.09);
+  --art-tint-fs: #0a7fae;
+  --art-tint-ai: #6247e0;
+  --art-tint-web: #4f7d08;
 }
 
 @layer base {
@@ -36,8 +81,16 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
-  ::selection { background: rgb(94 224 255 / 0.28); color: #fff; }
+  /* Dark text on a light background reads better with the platform's default smoothing. */
+  :root[data-theme="light"] body {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+  }
+  :root[data-theme="light"] h1,
+  :root[data-theme="light"] h2 { letter-spacing: -0.03em; }
+  ::selection { background: color-mix(in oklab, var(--color-accent) 28%, transparent); color: var(--color-ink); }
   /* Single-column grids shrink to the container instead of growing to their widest child.
      grid-cols-* utilities live in a later layer and still win. */
   .grid { grid-template-columns: minmax(0, 1fr); }
@@ -87,7 +140,7 @@
     position: relative;
     border: 1px solid var(--color-line);
     border-radius: 1rem;
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.03), rgb(255 255 255 / 0.01)), var(--color-surface);
+    background: linear-gradient(180deg, color-mix(in oklab, var(--color-white) 3%, transparent), color-mix(in oklab, var(--color-white) 1%, transparent)), var(--color-surface);
   }
 
   /* Pointer-following highlight. --mx / --my are set from JS without re-rendering. */
@@ -97,7 +150,7 @@
     z-index: -1;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgb(94 224 255 / 0.08), transparent 45%);
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), color-mix(in oklab, var(--color-accent) 8%, transparent), transparent 45%);
     content: "";
     opacity: 0;
     transition: opacity 0.35s ease;
@@ -124,16 +177,16 @@
   .btn svg { transition: transform 0.3s var(--ease-out-expo); }
   .btn-primary {
     background: var(--color-accent);
-    color: #041218;
-    box-shadow: 0 0 0 1px rgb(94 224 255 / 0.4), 0 8px 24px -8px rgb(94 224 255 / 0.5);
+    color: var(--color-on-accent);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-accent) 40%, transparent), 0 8px 24px -8px color-mix(in oklab, var(--color-accent) 50%, transparent);
   }
-  .btn-primary:hover { background: #8ae9ff; box-shadow: 0 0 0 1px rgb(94 224 255 / 0.6), 0 12px 32px -8px rgb(94 224 255 / 0.6); }
+  .btn-primary:hover { background: var(--color-accent-hover); box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-accent) 60%, transparent), 0 12px 32px -8px color-mix(in oklab, var(--color-accent) 60%, transparent); }
   .btn-ghost {
     border: 1px solid var(--color-line-strong);
-    background: rgb(255 255 255 / 0.03);
+    background: color-mix(in oklab, var(--color-white) 3%, transparent);
     color: var(--color-ink);
   }
-  .btn-ghost:hover { border-color: rgb(94 224 255 / 0.5); background: rgb(94 224 255 / 0.06); }
+  .btn-ghost:hover { border-color: color-mix(in oklab, var(--color-accent) 50%, transparent); background: color-mix(in oklab, var(--color-accent) 6%, transparent); }
   .btn:hover .arrow-ur { transform: translate(2px, -2px); }
   .btn:hover .arrow-d { transform: translateY(2px); }
 
@@ -143,8 +196,8 @@
     padding: 0.3rem 0.65rem;
     border: 1px solid var(--color-line);
     border-radius: 999px;
-    background: rgb(255 255 255 / 0.025);
-    color: #c6ccd4;
+    background: color-mix(in oklab, var(--color-white) 2.5%, transparent);
+    color: var(--color-chip);
     font: 0.75rem/1.4 var(--font-mono);
     transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
   }
@@ -173,14 +226,14 @@
     padding: 0.7rem 0.9rem;
     border: 1px solid var(--color-line-strong);
     border-radius: 0.75rem;
-    background: rgb(0 0 0 / 0.25);
+    background: var(--color-field);
     color: var(--color-ink);
     font-size: 0.95rem;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   .field::placeholder { color: var(--color-subtle); }
-  .field:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgb(94 224 255 / 0.15); }
-  .field[aria-invalid="true"] { border-color: #ff8a8a; }
+  .field:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 15%, transparent); }
+  .field[aria-invalid="true"] { border-color: var(--color-danger); }
 }
 
 /* Ambient background: pre-blurred radial gradients, animated with transform only. */
@@ -199,8 +252,8 @@
 }
 .bg-grid {
   background-image:
-    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    linear-gradient(var(--color-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
 }
@@ -222,11 +275,11 @@
 .pulse-ring { animation: pulse-ring 2s ease-out infinite; }
 
 @keyframes shimmer { 100% { transform: translateX(100%); } }
-.skeleton { position: relative; overflow: hidden; background: rgb(255 255 255 / 0.04); }
+.skeleton { position: relative; overflow: hidden; background: color-mix(in oklab, var(--color-white) 5%, transparent); }
 .skeleton::after {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.05), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-white) 6%, transparent), transparent);
   content: "";
   transform: translateX(-100%);
   animation: shimmer 1.4s infinite;

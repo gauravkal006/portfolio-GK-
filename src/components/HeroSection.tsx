@@ -1,27 +1,11 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ArrowDown, Download, Mail } from "lucide-react";
 import { profile } from "../data/profile";
-import { finePointer, gsap, MOTION_OK, useGSAP } from "../lib/gsap";
+import { finePointer, gsap, INTRO_DELAY, MOTION_OK, useGSAP } from "../lib/gsap";
 import { GitHubIcon, LinkedInIcon } from "./BrandIcons";
+import { ProfilePhoto } from "./ProfilePhoto";
 
 const nameLines = ["Gaurav", "Kalamkhede"];
-
-// Syntax-highlighted snapshot of verified profile facts.
-const S = ({ c, children }: { c: string; children: React.ReactNode }) => <span className={c}>{children}</span>;
-const str = "text-lime/90";
-const key = "text-ink";
-const pun = "text-subtle";
-const codeLines: React.ReactNode[] = [
-  <S c="italic text-subtle">// building for the bright side</S>,
-  <><S c="text-accent-2">const</S> <S c="text-accent">gaurav</S> <S c={pun}>=</S> <S c={pun}>{"{"}</S></>,
-  <>&nbsp;&nbsp;<S c={key}>role</S><S c={pun}>:</S> <S c={str}>"Full-Stack Developer"</S><S c={pun}>,</S></>,
-  <>&nbsp;&nbsp;<S c={key}>studying</S><S c={pun}>:</S> <S c={str}>"B.Tech CSE @ PRMITR"</S><S c={pun}>,</S></>,
-  <>&nbsp;&nbsp;<S c={key}>based</S><S c={pun}>:</S> <S c={str}>"Amravati, IN"</S><S c={pun}>,</S></>,
-  <>&nbsp;&nbsp;<S c={key}>stack</S><S c={pun}>: [</S><S c={str}>"Java"</S><S c={pun}>,</S> <S c={str}>"Spring Boot"</S><S c={pun}>,</S> <S c={str}>"React"</S><S c={pun}>],</S></>,
-  <>&nbsp;&nbsp;<S c={key}>exploring</S><S c={pun}>: [</S><S c={str}>"RAG"</S><S c={pun}>,</S> <S c={str}>"OCR"</S><S c={pun}>,</S> <S c={str}>"Azure"</S><S c={pun}>],</S></>,
-  <>&nbsp;&nbsp;<S c={key}>recent</S><S c={pun}>: [</S><S c={str}>"Validify"</S><S c={pun}>,</S> <S c={str}>"DocBlendAI"</S><S c={pun}>],</S></>,
-  <S c={pun}>{"};"}</S>,
-];
 
 export function HeroSection() {
   const root = useRef<HTMLElement>(null);
@@ -31,17 +15,17 @@ export function HeroSection() {
     () => {
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1 } });
+        const tl = gsap.timeline({ delay: INTRO_DELAY, defaults: { ease: "power4.out", duration: 1 } });
         tl.from("[data-hero='eyebrow']", { autoAlpha: 0, y: 14, duration: 0.7 })
           .from("[data-hero='word']", { yPercent: 115, duration: 1.1, stagger: 0.09 }, "-=0.4")
           .from("[data-hero='fade']", { autoAlpha: 0, y: 18, stagger: 0.08, duration: 0.8 }, "-=0.7")
-          .from("[data-hero='panel']", { autoAlpha: 0, y: 40, scale: 0.97, duration: 1.2 }, 0.35)
-          .from("[data-hero='line']", { autoAlpha: 0, x: -10, stagger: 0.05, duration: 0.5, ease: "power2.out" }, 0.8)
+          .from("[data-hero='panel']", { autoAlpha: 0, y: 40, scale: 0.96, duration: 1.2 }, 0.3)
+          .from("[data-hero='panel'] [data-photo-inner]", { scale: 1.15, duration: 1.6, ease: "power3.out" }, 0.3)
           .from("[data-hero='chip']", { autoAlpha: 0, scale: 0.85, stagger: 0.12, duration: 0.6, ease: "back.out(2)" }, 1.2)
           .from("[data-hero='scroll']", { autoAlpha: 0, duration: 0.6 }, 1.4);
 
         gsap.utils.toArray<HTMLElement>("[data-float]").forEach((chip, i) => {
-          gsap.to(chip, { y: i % 2 ? 8 : -8, duration: 3 + i * 0.6, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.8 });
+          gsap.to(chip, { y: i % 2 ? 8 : -8, duration: 3 + i * 0.6, ease: "sine.inOut", repeat: -1, yoyo: true, delay: INTRO_DELAY + 1.8 });
         });
 
         // Fade the scroll cue and ease the visual upward as the hero leaves.
@@ -70,41 +54,26 @@ export function HeroSection() {
               .to(erase, { n: 0, duration: current.length * 0.022, ease: "none", onUpdate: () => void (el.textContent = current.slice(0, Math.ceil(erase.n))) })
               .to(type, { n: next.length, duration: next.length * 0.045, ease: "none", onUpdate: () => void (el.textContent = next.slice(0, Math.ceil(type.n))) }, "+=0.15");
           };
-          gsap.delayedCall(2.6, cycle);
+          gsap.delayedCall(INTRO_DELAY + 2.6, cycle);
         }
 
-        // Restrained pointer parallax on desktop.
+        // Floating chips drift slightly against the pointer on desktop (the photo card tilts itself).
         if (finePointer()) {
-          const panel = root.current?.querySelector<HTMLElement>("[data-hero='tilt']");
-          if (panel) {
-            const rx = gsap.quickTo(panel, "rotationX", { duration: 0.8, ease: "power3.out" });
-            const ry = gsap.quickTo(panel, "rotationY", { duration: 0.8, ease: "power3.out" });
-            const chips = gsap.utils.toArray<HTMLElement>("[data-hero='chip']").map((chip) => ({
-              x: gsap.quickTo(chip, "x", { duration: 1, ease: "power3.out" }),
-              y: gsap.quickTo(chip, "y", { duration: 1, ease: "power3.out" }),
-            }));
-            const onMove = (event: PointerEvent) => {
-              const px = event.clientX / window.innerWidth - 0.5;
-              const py = event.clientY / window.innerHeight - 0.5;
-              rx(-py * 6);
-              ry(px * 8);
-              chips.forEach((c, i) => {
-                c.x(px * (14 + i * 8));
-                c.y(py * (14 + i * 8));
-              });
-            };
-            const onLeave = () => {
-              rx(0);
-              ry(0);
-            };
-            const section = root.current!;
-            section.addEventListener("pointermove", onMove);
-            section.addEventListener("pointerleave", onLeave);
-            return () => {
-              section.removeEventListener("pointermove", onMove);
-              section.removeEventListener("pointerleave", onLeave);
-            };
-          }
+          const chips = gsap.utils.toArray<HTMLElement>("[data-hero='chip']").map((chip) => ({
+            x: gsap.quickTo(chip, "x", { duration: 1, ease: "power3.out" }),
+            y: gsap.quickTo(chip, "y", { duration: 1, ease: "power3.out" }),
+          }));
+          const onMove = (event: PointerEvent) => {
+            const px = event.clientX / window.innerWidth - 0.5;
+            const py = event.clientY / window.innerHeight - 0.5;
+            chips.forEach((c, i) => {
+              c.x(px * (14 + i * 8));
+              c.y(py * (14 + i * 8));
+            });
+          };
+          const section = root.current!;
+          section.addEventListener("pointermove", onMove);
+          return () => section.removeEventListener("pointermove", onMove);
         }
       });
     },
@@ -118,17 +87,20 @@ export function HeroSection() {
       aria-labelledby="hero-title"
       className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-16 md:pt-32 md:pb-24"
     >
-      <div className="container-page grid grid-cols-[minmax(0,1fr)] items-center gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10">
+      <div className="container-page grid grid-cols-[minmax(0,1fr)] items-center gap-14 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] md:gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10">
         <div>
-          <p data-hero="eyebrow" className="inline-flex items-center gap-2.5 rounded-full border border-line bg-white/[0.03] py-1.5 pr-3.5 pl-3 text-[0.8rem] text-muted">
+          <div data-hero="eyebrow" className="flex items-center gap-3">
+            <MobileAvatar />
+          <p className="inline-flex items-center gap-2.5 rounded-full border border-line bg-white/[0.03] py-1.5 pr-3.5 pl-3 text-[0.8rem] text-muted">
             <span className="relative flex size-2">
               <span className="pulse-ring absolute inset-0 rounded-full bg-lime" />
               <span className="relative size-2 rounded-full bg-lime" />
             </span>
             Available for new opportunities
           </p>
+          </div>
 
-          <h1 id="hero-title" className="mt-7 text-[clamp(2.9rem,10.5vw,6.25rem)] lg:text-[clamp(4rem,6.6vw,6.25rem)] leading-[0.92] font-semibold tracking-[-0.055em]">
+          <h1 id="hero-title" className="mt-7 text-[clamp(2.9rem,10.5vw,6.25rem)] md:text-[clamp(2.9rem,6.6vw,6.25rem)] leading-[0.92] font-semibold tracking-[-0.055em]">
             <span className="sr-only">{profile.name}</span>
             {nameLines.map((line, i) => (
               <span key={line} aria-hidden="true" className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
@@ -179,35 +151,17 @@ export function HeroSection() {
           </ul>
         </div>
 
-        <div data-hero="visual" className="relative mx-auto w-full max-w-[34rem] [perspective:1200px]" aria-hidden="true">
+        <div data-hero="visual" className="relative ml-auto hidden w-full max-w-[25rem] md:block">
           <div data-hero="panel">
-            <div data-hero="tilt" className="panel overflow-hidden shadow-[0_40px_120px_-40px_rgb(94_224_255/0.25)] [transform-style:preserve-3d]">
-              <div className="flex items-center gap-2 border-b border-line px-4 py-3">
-                <span className="size-2.5 rounded-full bg-white/15" />
-                <span className="size-2.5 rounded-full bg-white/15" />
-                <span className="size-2.5 rounded-full bg-white/15" />
-                <span className="ml-3 rounded-md bg-white/[0.04] px-2.5 py-1 font-mono text-[0.72rem] text-muted">gaurav.ts</span>
-              </div>
-              <pre className="overflow-hidden px-4 py-5 font-mono text-[clamp(0.6rem,2.9vw,0.84rem)] leading-[1.9] sm:px-5">
-                {codeLines.map((line, i) => (
-                  <div key={i} data-hero="line" className="flex whitespace-pre">
-                    <span className="mr-4 hidden w-4 shrink-0 text-right text-subtle/60 select-none sm:inline-block">{i + 1}</span>
-                    <span className="min-w-0">{line}</span>
-                  </div>
-                ))}
-              </pre>
-              <div className="flex items-center border-t border-line px-4 py-2 font-mono text-[0.68rem] text-subtle">
-                <span className="flex items-center gap-1.5"><span className="size-1.5 rounded-full bg-lime" /> main</span>
-              </div>
-            </div>
+            <ProfilePhoto reveal={false} priority />
           </div>
 
-          <div data-hero="chip" className="absolute -top-5 left-4 sm:-left-5">
+          <div data-hero="chip" aria-hidden="true" className="absolute top-16 -left-10 hidden lg:block">
             <div data-float className="rounded-xl border border-line-strong bg-surface-2/90 px-3.5 py-2 font-mono text-[0.72rem] text-ink shadow-xl backdrop-blur-md">
               <span className="text-accent">●</span> Java · Spring Boot
             </div>
           </div>
-          <div data-hero="chip" className="absolute -bottom-5 right-4 sm:-right-5">
+          <div data-hero="chip" aria-hidden="true" className="absolute bottom-24 -right-10 hidden lg:block">
             <div data-float className="rounded-xl border border-line-strong bg-surface-2/90 px-3.5 py-2 font-mono text-[0.72rem] text-ink shadow-xl backdrop-blur-md">
               <span className="text-accent-2">●</span> RAG · OCR · LLM
             </div>
@@ -226,5 +180,19 @@ export function HeroSection() {
         Scroll
       </a>
     </section>
+  );
+}
+
+/** Small round portrait shown beside the status pill on phones, where the photo card is hidden. */
+function MobileAvatar() {
+  const [failed, setFailed] = useState(false);
+  return (
+    <span className="relative grid size-12 shrink-0 place-items-center overflow-hidden rounded-full border border-accent/40 bg-surface-2 md:hidden">
+      {profile.photo && !failed ? (
+        <img src={profile.photo} alt={`Portrait of ${profile.name}`} width={96} height={96} onError={() => setFailed(true)} className="h-full w-full object-cover" />
+      ) : (
+        <span aria-hidden="true" className="font-display text-sm font-semibold text-accent">{profile.initials}</span>
+      )}
+    </span>
   );
 }
