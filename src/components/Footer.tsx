@@ -3,7 +3,7 @@ import { navItems, profile } from "../data/profile";
 /** Colophon, continuing the inverted back cover from the contact section. */
 export function Footer() {
   return (
-    <footer className="bg-cover text-cover-ink">
+    <footer className="bg-cover text-cover-ink max-md:pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
       <div className="container-page grid gap-8 border-t border-cover-ink/30 py-10 md:grid-cols-12 md:items-start md:gap-6">
         <div className="md:col-span-5">
           <a href="#top" className="font-serif text-[1.5rem] italic transition-colors hover:text-accent-inv">
@@ -20,7 +20,6 @@ export function Footer() {
             {navItems.map((item) => (
               <li key={item.id}>
                 <a href={`#${item.id}`} className="inline-flex min-h-9 items-center gap-2 transition-colors hover:text-accent-inv">
-                  <span className="font-mono text-[0.8rem] text-cover-ink/50">{item.index}</span>
                   {item.label}
                 </a>
               </li>

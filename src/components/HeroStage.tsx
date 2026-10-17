@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { motion, type Variants } from "motion/react";
-import { heroFacts, heroQuote, type HeroFact } from "../data/profile";
+import { ArrowUpRight } from "lucide-react";
+import { codingProfiles, heroFacts, heroQuote, type HeroFact } from "../data/profile";
 import { useIntroDone } from "../lib/intro";
 import { Glyph } from "./Motif";
 
@@ -35,7 +36,7 @@ function FactCard({ item, side, i, className = "" }: { item: HeroFact; side: "le
     >
       <div className="fact-float" style={{ animationDelay: `${(side === "left" ? 0 : -2.2) - i * 1.4}s` }}>
         <div className="fact-face">
-          <p className="flex items-center gap-2 font-mono text-[0.72rem] tracking-[0.08em] text-muted uppercase">
+          <p className="flex items-center gap-2 text-[0.88rem] text-muted">
             <Glyph shape={item.glyph} className="size-2.5 shrink-0" />
             {item.label}
           </p>
@@ -44,6 +45,43 @@ function FactCard({ item, side, i, className = "" }: { item: HeroFact; side: "le
         </div>
       </div>
     </motion.li>
+  );
+}
+
+const badge: Variants = {
+  hidden: { opacity: 0, y: 14, scale: 0.9 },
+  show: (i: number) => ({ opacity: 1, y: 0, scale: 1, transition: { ...spring, delay: 0.6 + i * 0.1 } }),
+};
+
+/**
+ * Competitive-programming profiles (LeetCode, HackerRank, …) as small pressable badges under the
+ * profile card. Only platforms with a URL in profile.ts are shown, so nothing renders until the
+ * real profile links are added.
+ */
+/** Username from a profile URL, e.g. "https://leetcode.com/u/name/" → "name". */
+const handleOf = (url: string) => url.replace(/\/+$/, "").split("/").pop() ?? "";
+
+function CodingBadges() {
+  const items = codingProfiles.filter((p) => p.url);
+  if (!items.length) return null;
+  return (
+    <ul aria-label="Coding profiles" className="mt-6 grid gap-2.5">
+      {items.map((p, i) => (
+        <motion.li key={p.name} custom={i} variants={badge}>
+          <a href={p.url!} target="_blank" rel="noopener noreferrer" className="code-badge group">
+            <span aria-hidden="true" className="code-badge__mark" style={{ background: p.color }}>
+              {p.short}
+            </span>
+            <span className="flex min-w-0 flex-col leading-tight">
+              <span>{p.name}</span>
+              <span className="text-[0.85rem] font-normal text-muted">@{handleOf(p.url!)}</span>
+            </span>
+            <ArrowUpRight size={15} aria-hidden="true" className="ml-auto shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
+        </motion.li>
+      ))}
+    </ul>
   );
 }
 
@@ -74,6 +112,7 @@ export function HeroStage({ children }: { children: ReactNode }) {
 
         <motion.div variants={centre} className="relative z-0 mx-auto w-full max-w-[17rem] xl:max-w-none">
           {children}
+          <CodingBadges />
         </motion.div>
 
         <ul aria-label="What I work on" className="hidden flex-col gap-5 pt-8 xl:flex">
@@ -84,9 +123,9 @@ export function HeroStage({ children }: { children: ReactNode }) {
       </div>
 
       {/* Smaller screens: the same cards in a grid under the profile card. */}
-      <ul aria-label="About me" className="mx-auto mt-10 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-3 xl:hidden">
+      <ul aria-label="About me" className="swipe-row mx-auto mt-10 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-3 xl:hidden max-sm:-mx-4 max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:scroll-px-4 max-sm:overflow-x-auto max-sm:px-4 max-sm:py-2">
         {[...heroFacts.left.map((item) => ["left", item] as const), ...heroFacts.right.map((item) => ["right", item] as const)].map(([side, item], i) => (
-          <FactCard key={item.label} item={item} side={side} i={i % 3} />
+          <FactCard key={item.label} item={item} side={side} i={i % 3} className="max-sm:w-[62%] max-sm:shrink-0 max-sm:snap-start" />
         ))}
       </ul>
     </motion.div>

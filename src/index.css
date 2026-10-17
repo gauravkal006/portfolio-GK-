@@ -126,9 +126,9 @@
 
   /* Compact monospace metadata: dates, indexes, section labels. */
   .label {
-    font: 500 0.8rem/1.45 var(--font-mono);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font: 500 0.95rem/1.45 var(--font-sans);
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--color-muted);
   }
 
@@ -203,13 +203,13 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.15rem 0;
-    font: 0.88rem/1.6 var(--font-mono);
+    font: 0.97rem/1.6 var(--font-sans);
     color: var(--color-muted);
   }
   .stack-list > li:not(:last-child)::after {
-    margin-inline: 0.5rem;
+    margin-inline: 0.45rem;
     color: var(--color-line-strong);
-    content: "/";
+    content: "·";
   }
 
   /* Editorial drop cap for opening paragraphs. */
@@ -693,8 +693,7 @@
 .holo__meta {
   margin: 0;
   color: var(--color-muted);
-  font: 0.8rem/1.4 var(--font-mono);
-  letter-spacing: 0.04em;
+  font: 0.92rem/1.4 var(--font-sans);
 }
 .holo__role {
   margin: 0;
@@ -702,9 +701,7 @@
   border: 1px solid var(--color-line-strong);
   border-radius: 999px;
   color: var(--color-accent-ink);
-  font: 500 0.72rem/1.4 var(--font-mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font: 500 0.85rem/1.4 var(--font-sans);
   white-space: nowrap;
 }
 
@@ -952,95 +949,6 @@ button.push { padding: 0; border: 0; background: transparent; cursor: pointer; }
 /* Ambient blobs only move while the dark theme shows them. */
 :root:not([data-theme="dark"]) .ambient__blob { animation-play-state: paused; }
 
-/* ---------- Custom cursor (see CursorEffect.tsx) ---------- */
-.cursor-dot,
-.cursor-ring,
-.cursor-glow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.cursor-visible .cursor-dot,
-.cursor-visible .cursor-ring { opacity: 1; }
-:root[data-theme="dark"].cursor-visible .cursor-glow { opacity: 1; }
-.has-custom-cursor,
-.has-custom-cursor * { cursor: none !important; }
-.has-custom-cursor input:not([type="checkbox"]):not([type="radio"]),
-.has-custom-cursor textarea { cursor: text !important; }
-
-.cursor-dot {
-  z-index: 210;
-  width: 0;
-  height: 0;
-}
-.cursor-dot::before {
-  position: absolute;
-  top: -2.5px;
-  left: -2.5px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #fff;
-  content: "";
-  mix-blend-mode: difference;
-}
-.cursor-ring {
-  z-index: 209;
-  width: 0;
-  height: 0;
-  mix-blend-mode: difference;
-}
-.cursor-ring::before {
-  position: absolute;
-  top: -13px;
-  left: -13px;
-  width: 26px;
-  height: 26px;
-  border: 1px solid #fff;
-  border-radius: 50%;
-  content: "";
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-radius 0.3s ease, width 0.3s ease, left 0.3s ease;
-}
-.cursor-ring[data-state="hover"]::before { background: rgb(255 255 255 / 0.12); transform: scale(1.4); }
-.cursor-ring[data-state="label"]::before { background: #fff; transform: scale(2.3); }
-.cursor-ring[data-state="text"]::before { left: -1.5px; width: 3px; border-radius: 2px; transform: scaleY(0.75); }
-.cursor-ring.is-down::before { transform: scale(0.8); }
-.cursor-ring[data-state="hover"].is-down::before { transform: scale(1.15); }
-.cursor-ring__label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  color: #000;
-  font: 500 0.62rem/1 var(--font-mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.6);
-  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.cursor-ring[data-state="label"] .cursor-ring__label { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-
-/* Warm light that follows the cursor behind the content (dark theme only). */
-.cursor-glow {
-  z-index: -5;
-  width: 0;
-  height: 0;
-}
-.cursor-glow::before {
-  position: absolute;
-  top: -190px;
-  left: -190px;
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(232 135 93 / 0.1), rgb(227 186 97 / 0.04) 40%, transparent 70%);
-  content: "";
-}
-
 /* ---------- On-page résumé viewer ---------- */
 .resume-sheet {
   border: 1px solid var(--color-line);
@@ -1059,3 +967,88 @@ button.push { padding: 0; border: 0; background: transparent; cursor: pointer; }
 }
 .resume-tool:hover { background: var(--color-paper-2); color: var(--color-ink); }
 .resume-tool:active { transform: scale(0.92); }
+
+/* ---------- Certificate cards ---------- */
+.cert-card {
+  padding: 8px;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  background: var(--color-bg);
+  box-shadow: var(--card-shadow);
+  cursor: zoom-in;
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.cert-card:hover,
+.cert-card:focus-visible { border-color: var(--color-line-strong); box-shadow: var(--card-shadow-hover); }
+.cert-frame {
+  border: 3px double var(--color-line-strong);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--color-mustard) 12%, transparent), transparent 60%),
+    var(--color-paper);
+}
+
+/* ---------- Coding profile badges under the profile card ---------- */
+.code-badge {
+  display: flex;
+  min-height: 2.9rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.7rem 0.45rem 0.45rem;
+  border-radius: 12px;
+  background: var(--noise), var(--skeu-knob);
+  box-shadow: var(--skeu-knob-shadow);
+  color: var(--color-ink);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: transform 0.25s cubic-bezier(0.3, 0.7, 0.4, 1.5), box-shadow 0.25s ease;
+}
+.code-badge:hover { transform: translateY(-3px); }
+.code-badge:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 0.12rem 0.25rem rgb(0 0 0 / 0.22), inset 0 -0.06rem 0.06rem rgb(255 255 255 / 0.2);
+}
+.code-badge__mark {
+  display: grid;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 8px;
+  color: #111;
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 2px 4px -1px rgb(0 0 0 / 0.3);
+}
+
+/* Small certificate thumbnail button on Journey entries. */
+.cert-thumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0.9rem 0.35rem 0.35rem;
+  border-radius: 12px;
+  background: var(--noise), var(--skeu-knob);
+  box-shadow: var(--skeu-knob-shadow);
+  cursor: zoom-in;
+  transition: transform 0.25s cubic-bezier(0.3, 0.7, 0.4, 1.5);
+}
+.cert-thumb:hover { transform: translateY(-2px) scale(1.03); }
+.cert-thumb:active { transform: translateY(1px); }
+.cert-thumb img { box-shadow: 0 0 0 1px var(--color-line); background: #fff; }
+
+/* ---------- Phone: app-style bottom tab bar ---------- */
+.bottom-nav {
+  position: fixed;
+  z-index: 45;
+  right: 0.75rem;
+  bottom: calc(0.6rem + env(safe-area-inset-bottom));
+  left: 0.75rem;
+  border-radius: 24px;
+  box-shadow: 0 12px 30px -10px rgb(0 0 0 / 0.35);
+}
+html { -webkit-tap-highlight-color: transparent; }
+/* Horizontal swipe rows: hide the scrollbar but keep native scrolling. */
+.swipe-row { scrollbar-width: none; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; contain: paint; }
+.swipe-row::-webkit-scrollbar { display: none; }

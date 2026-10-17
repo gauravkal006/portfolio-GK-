@@ -108,7 +108,6 @@ export function Navbar() {
                       transition={{ type: "spring", stiffness: 420, damping: 34 }}
                     />
                   )}
-                  <span className="nav-index relative font-mono text-[0.72rem]">{item.index}</span>
                   {/* Label rolls up on hover to reveal an accent copy of itself. */}
                   <span className="nav-roll relative">
                     <span data-text={item.label}>{item.label}</span>
@@ -173,7 +172,6 @@ export function Navbar() {
                     active === item.id ? "text-accent-ink italic" : "text-ink hover:text-accent-ink"
                   }`}
                 >
-                  <span className="font-mono text-[0.82rem] text-muted not-italic">Nº {item.index}</span>
                   {item.label}
                 </a>
               </li>

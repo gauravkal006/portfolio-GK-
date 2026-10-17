@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, Download, FileText, X } from "lucide-react";
 import { profile } from "../data/profile";
 import { closeResume, useResumeOpen } from "../lib/resumeViewer";
+import { useSheet } from "../lib/sheet";
 
 /** Browsers that can render a PDF inside the page (desktop Chrome, Edge, Firefox, Safari). */
 const canShowInline = () => {
@@ -21,6 +22,7 @@ export function ResumeViewer() {
   const sheetRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const inline = typeof navigator !== "undefined" && canShowInline();
+  const { phone, phoneMotion, handle, wrapClass, sheetClass } = useSheet(closeResume);
 
   useEffect(() => {
     if (!open) return;
@@ -63,23 +65,25 @@ export function ResumeViewer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
-          <div key="resume-sheet" className="pointer-events-none fixed inset-0 z-[96] grid place-items-center p-3 sm:p-6">
+          <div key="resume-sheet" className={`pointer-events-none fixed inset-0 z-[96] grid ${wrapClass}`}>
             <motion.div
               ref={sheetRef}
               role="dialog"
               aria-modal="true"
               aria-labelledby="resume-viewer-title"
-              className="resume-sheet pointer-events-auto grid w-[min(900px,100%)] grid-rows-[auto_minmax(0,1fr)] overflow-hidden"
+              className={`resume-sheet pointer-events-auto grid w-[min(900px,100%)] grid-rows-[auto_auto_minmax(0,1fr)] overflow-hidden ${sheetClass}`}
               style={{ height: inline ? "min(92dvh, 1180px)" : "auto" }}
               initial={{ opacity: 0, y: 40, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 260, damping: 28 } }}
               exit={{ opacity: 0, y: 24, scale: 0.97, transition: { duration: 0.2 } }}
+              {...(phone ? phoneMotion : {})}
             >
+              {handle ?? <span aria-hidden="true" />}
               <header className="flex items-center gap-3 border-b border-line px-4 py-3 sm:px-5">
                 <span aria-hidden="true" className="nav-coin !size-9 !text-[0.9rem]">gk</span>
                 <div className="min-w-0">
                   <h2 id="resume-viewer-title" className="truncate font-serif text-[1.15rem] leading-tight">{profile.name} · Résumé</h2>
-                  <p className="label !text-[0.7rem]">PDF · 1 page</p>
+                  <p className="text-[0.9rem] text-muted">PDF · 1 page</p>
                 </div>
                 <div className="ml-auto flex items-center gap-1">
                   <a

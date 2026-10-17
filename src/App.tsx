@@ -1,8 +1,10 @@
 import { MotionConfig } from "motion/react";
 import { AboutSection } from "./components/AboutSection";
+import { CertificatesSection } from "./components/CertificatesSection";
+import { CertificateViewer } from "./components/CertificateViewer";
 import { BackToTop } from "./components/BackToTop";
+import { BottomNav } from "./components/BottomNav";
 import { ContactSection } from "./components/ContactSection";
-import { CursorEffect } from "./components/CursorEffect";
 import { ExperienceSection } from "./components/ExperienceSection";
 import { FeaturedProjects } from "./components/FeaturedProjects";
 import { GalaxyBackground } from "./components/GalaxyBackground";
@@ -36,13 +38,15 @@ export default function App() {
         <FeaturedProjects />
         <GitHubActivity />
         <ExperienceSection />
+        <CertificatesSection />
         <ResumeSection />
         <ContactSection />
       </main>
       <Footer />
       <ResumeViewer />
+      <CertificateViewer />
       <BackToTop />
-      <CursorEffect />
+      <BottomNav />
     </MotionConfig>
   );
 }

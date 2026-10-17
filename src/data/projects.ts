@@ -89,6 +89,7 @@ export const projects: Project[] = [
     description: "A two-stage vision system that predicts banana, apple and orange freshness and pinpoints decay.",
     stack: ["YOLOv11", "ONNX", "TensorFlow Lite"],
     repo: gh("Fruit_freshness_detection"),
+    preview: "images/projects/fruit-freshness.webp",
   },
   {
     name: "ExamShield-X",

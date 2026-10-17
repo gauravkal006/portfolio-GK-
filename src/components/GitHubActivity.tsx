@@ -122,7 +122,7 @@ export function GitHubActivity() {
   const loading = !data && state.status !== "error";
 
   return (
-    <section ref={ref} id="github" aria-labelledby="github-title" className="relative py-20 md:py-28">
+    <section ref={ref} id="github" aria-labelledby="github-title" className="relative py-14 md:py-20">
       <div className="container-page">
         <SectionHeading
           index="04"
@@ -134,7 +134,6 @@ export function GitHubActivity() {
               Live from <em className="text-accent">GitHub</em>
             </>
           }
-          note="Pulled from GitHub's public API when you visit, so it is always current. Forks are left out."
         />
 
         <div className="grid gap-14 md:grid-cols-12 md:gap-6" aria-busy={state.status === "loading"}>
@@ -158,7 +157,7 @@ export function GitHubActivity() {
                       <li key={l.name} className="flex items-center gap-2 text-muted">
                         <span className="size-2.5 shrink-0" style={{ background: swatch(i) }} aria-hidden="true" />
                         <span className="truncate">{l.name}</span>
-                        <span className="ml-auto font-mono text-[0.82rem]">{l.count}</span>
+                        <span className="ml-auto text-[0.9rem]">{l.count}</span>
                       </li>
                     ))}
                   </ul>
@@ -222,7 +221,7 @@ export function GitHubActivity() {
                         <span className="sr-only">(opens in a new tab)</span>
                       </span>
                       {repo.description && <span className="mt-1 line-clamp-2 text-[0.9rem] text-muted">{repo.description}</span>}
-                      <span className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2.5 font-mono text-[0.8rem] text-muted">
+                      <span className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2.5 text-[0.88rem] text-muted">
                         {repo.language && (
                           <span className="flex items-center gap-1.5">
                             <span className="size-2" style={{ background: swatch(rank.get(repo.language) ?? swatches.length) }} aria-hidden="true" />

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type PointerEvent, type Ref } from "react"
 import { AnimatePresence, motion, useSpring } from "motion/react";
 import { ArrowUpRight, Lock, Plus, X } from "lucide-react";
 import { slugOf, type Project } from "../data/projects";
+import { useSheet } from "../lib/sheet";
 import { ProjectArt } from "./ProjectArt";
 
 const spring = { type: "spring", stiffness: 260, damping: 30 } as const;
@@ -31,6 +32,7 @@ export function ProjectLinks({ project }: { project: Project }) {
  * `full` (the opened sheet) it is shown whole at its own proportions.
  */
 export function PreviewFrame({ project, full = false }: { project: Project; full?: boolean }) {
+  // Cards use a slightly wider 16:9 window to keep them compact; the opened sheet uses 16:10.
   const [failed, setFailed] = useState(false);
   const slug = slugOf(project);
   const url = project.demo ? project.demo.replace(/^https?:\/\//, "").replace(/\/$/, "") : `github.com/gauravkal006/${slug}`;
@@ -49,7 +51,7 @@ export function PreviewFrame({ project, full = false }: { project: Project; full
           <span className="truncate">{url}</span>
         </span>
       </div>
-      <div className={`relative overflow-hidden ${full && showShot ? "" : "aspect-[16/10]"}`}>
+      <div className={`relative overflow-hidden ${full && showShot ? "" : full ? "aspect-[16/10]" : "aspect-[16/9]"}`}>
         <div className="h-full w-full transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.04]">
           {showShot ? (
             <img
@@ -103,7 +105,7 @@ export function ProjectCard({ project, number, featured, onOpen, ref }: CardProp
     <motion.li
       ref={ref}
       layout
-      className={featured ? "lg:col-span-2" : ""}
+      className="h-full max-md:w-[84%] max-md:shrink-0 max-md:snap-start"
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -122,37 +124,38 @@ export function ProjectCard({ project, number, featured, onOpen, ref }: CardProp
         <motion.div layoutId={`preview-${slug}`} transition={spring}>
           <PreviewFrame project={project} />
         </motion.div>
-        <div className="flex flex-1 flex-col p-6 md:p-7">
+        <div className="flex flex-1 flex-col p-5">
           <div className="flex items-center justify-between gap-3">
-            <span className="font-mono text-[0.85rem] text-accent-ink">Nº {String(number).padStart(2, "0")}</span>
-            {featured && <span className="label rounded-full border border-line px-2.5 py-0.5 !text-ink">Featured</span>}
+            <span className="font-serif text-[1.1rem] italic text-accent-ink">No. {String(number).padStart(2, "0")}</span>
+            <span className="flex items-center gap-2">
+              {featured && <span className="label rounded-full border border-line px-2.5 py-0.5 !text-ink">Featured</span>}
+              <span
+                aria-hidden="true"
+                className="grid size-8 place-items-center rounded-full border border-line-strong text-ink transition-[transform,color,border-color] duration-500 ease-[var(--ease-out-expo)] group-hover:rotate-90 group-hover:border-accent group-hover:text-accent-ink"
+              >
+                <Plus size={16} />
+              </span>
+            </span>
           </div>
-          <motion.h3 layoutId={`title-${slug}`} transition={spring} className="display mt-3 text-[clamp(1.75rem,2.6vw,2.25rem)] leading-[1.05]">
+          <motion.h3 layoutId={`title-${slug}`} transition={spring} className="display mt-2 text-[clamp(1.45rem,2vw,1.75rem)] leading-[1.08]">
             {project.name}
           </motion.h3>
-          <p className="label mt-2">
+          <p className="label mt-1">
             {project.label}
             {project.year && <> · {project.year}</>}
           </p>
-          <p className="mt-4 line-clamp-3 text-[1.05rem] leading-relaxed text-muted">{project.description}</p>
-          <ul className="stack-list mt-5" aria-label="Technologies">
+          <p className="mt-2.5 line-clamp-2 text-[0.98rem] leading-relaxed text-muted">{project.description}</p>
+          <ul className="stack-list mt-3" aria-label="Technologies">
             {project.stack.map((t) => (
               <li key={t}>{t}</li>
             ))}
           </ul>
-          <span aria-hidden="true" className="mt-auto flex items-center gap-2 pt-6 font-medium text-ink transition-colors group-hover:text-accent-ink">
-            Open project
-            <span className="grid size-7 place-items-center rounded-full border border-current transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:rotate-90">
-              <Plus size={15} />
-            </span>
-          </span>
         </div>
         {/* The whole card is one button; its accessible name is the project. */}
         <button
           type="button"
           aria-haspopup="dialog"
           aria-label={`Open ${project.name} details`}
-          data-cursor="Open"
           onClick={(e) => {
             reset();
             onOpen(project, e.currentTarget);
@@ -166,6 +169,7 @@ export function ProjectCard({ project, number, featured, onOpen, ref }: CardProp
 
 /** Expanded project view. Shares layout ids with its card, so the card grows into this sheet. */
 export function ProjectDetail({ project, onClose }: { project: Project | null; onClose: () => void }) {
+  const { phone, phoneMotion, handle, wrapClass, sheetClass } = useSheet(onClose);
   const sheetRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -210,18 +214,20 @@ export function ProjectDetail({ project, onClose }: { project: Project | null; o
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
-          <div key="sheet" className="pointer-events-none fixed inset-0 z-[90] grid place-items-center p-3 sm:p-6">
+          <div key="sheet" className={`pointer-events-none fixed inset-0 z-[90] grid ${wrapClass}`}>
             <motion.div
               ref={sheetRef}
-              layoutId={`card-${slugOf(project)}`}
+              layoutId={phone ? undefined : `card-${slugOf(project)}`}
               transition={spring}
+              {...(phone ? phoneMotion : {})}
               role="dialog"
               aria-modal="true"
               aria-labelledby="project-detail-title"
               style={{ borderRadius: 24 }}
-              className="pointer-events-auto relative max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl overflow-y-auto overscroll-contain border border-line bg-bg shadow-[0_40px_120px_-30px_rgb(0_0_0/0.55)] sm:max-h-[calc(100dvh-3rem)]"
+              className={`pointer-events-auto relative max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl overflow-y-auto overscroll-contain border border-line bg-bg shadow-[0_40px_120px_-30px_rgb(0_0_0/0.55)] sm:max-h-[calc(100dvh-3rem)] ${sheetClass}`}
             >
-              <motion.div layoutId={`preview-${slugOf(project)}`} transition={spring}>
+              {handle && <div className="sticky top-0 z-20 bg-bg">{handle}</div>}
+              <motion.div layoutId={phone ? undefined : `preview-${slugOf(project)}`} transition={spring}>
                 <PreviewFrame project={project} full />
               </motion.div>
               <button
@@ -235,7 +241,7 @@ export function ProjectDetail({ project, onClose }: { project: Project | null; o
               </button>
 
               <div className="p-6 sm:p-9">
-                <motion.h3 layoutId={`title-${slugOf(project)}`} transition={spring} id="project-detail-title" className="display text-[clamp(2.2rem,5vw,3.25rem)] leading-[1]">
+                <motion.h3 layoutId={phone ? undefined : `title-${slugOf(project)}`} transition={spring} id="project-detail-title" className="display text-[clamp(2.2rem,5vw,3.25rem)] leading-[1]">
                   {project.name}
                 </motion.h3>
                 <motion.div

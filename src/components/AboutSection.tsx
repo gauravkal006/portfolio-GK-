@@ -14,7 +14,7 @@ export function AboutSection() {
   useSectionReveal(ref);
 
   return (
-    <section ref={ref} id="about" aria-labelledby="about-title" className="relative py-20 md:py-28">
+    <section ref={ref} id="about" aria-labelledby="about-title" className="relative py-14 md:py-20">
       <div className="container-page">
         <SectionHeading
           index="01"
@@ -29,8 +29,8 @@ export function AboutSection() {
           }
         />
 
-        <div className="grid gap-14 md:grid-cols-12 md:gap-6">
-          <div data-reveal className="space-y-6 text-[1.1rem] leading-[1.75] md:col-span-7 md:col-start-6 md:row-start-1 lg:col-span-6 lg:col-start-6">
+        <div className="grid gap-10 md:grid-cols-12 md:gap-6">
+          <div data-reveal className="space-y-4 text-[1.05rem] leading-[1.7] md:col-span-7 md:col-start-6 md:row-start-1 lg:col-span-6 lg:col-start-6">
             <p className="dropcap">
               My name is Gaurav, and I'm a Computer Science Engineering student at Prof. Ram Meghe Institute of Technology and Research in
               Amravati. I came to the degree after a Diploma in Information Technology, and the things that keep pulling me in

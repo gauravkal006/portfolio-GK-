@@ -44,8 +44,8 @@ export const heroQuote = {
 // Competitive-programming profiles. Hidden until real handles are added: set `url` to the
 // profile address (e.g. "https://leetcode.com/u/<handle>/") to show a platform.
 export const codingProfiles: { name: string; short: string; color: string; url: string | null }[] = [
-  { name: "LeetCode", short: "LC", color: "#FFA116", url: null },
-  { name: "HackerRank", short: "HR", color: "#2EC866", url: null },
+  { name: "LeetCode", short: "LC", color: "#FFA116", url: "https://leetcode.com/u/gauravkal66/" },
+  { name: "HackerRank", short: "HR", color: "#2EC866", url: "https://www.hackerrank.com/profile/gauravkal66" },
   { name: "Codeforces", short: "CF", color: "#1F8ACB", url: null },
   { name: "CodeChef", short: "CC", color: "#B7834F", url: null },
 ];
@@ -56,6 +56,6 @@ export const navItems = [
   { id: "skills", label: "Skills", index: "02" },
   { id: "projects", label: "Work", index: "03" },
   { id: "experience", label: "Journey", index: "05" },
-  { id: "resume", label: "Resume", index: "06" },
-  { id: "contact", label: "Contact", index: "07" },
+  { id: "resume", label: "Resume", index: "07" },
+  { id: "contact", label: "Contact", index: "08" },
 ] as const;

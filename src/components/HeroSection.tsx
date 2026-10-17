@@ -44,17 +44,17 @@ export function HeroSection() {
   return (
     <section ref={root} id="top" aria-labelledby="hero-title" className="relative pt-[4.5rem] md:pt-20">
       <div className="container-page">
-        <div data-hero="mast" className="label flex items-center justify-between gap-4 border-b border-ink py-3 !text-ink">
-          <span>Portfolio · {new Date().getFullYear()}</span>
-          <span className="hidden md:block">B.Tech Computer Science · PRMITR</span>
-          <span>{profile.location}</span>
+        <div data-hero="mast" className="flex items-baseline justify-between gap-4 border-b border-ink py-3.5 text-[1.05rem]">
+          <span className="font-serif text-[1.15rem] italic">Portfolio, {new Date().getFullYear()}</span>
+          <span className="hidden text-muted md:block">B.Tech in Computer Science at PRMITR</span>
+          <span className="text-muted">{profile.location}</span>
         </div>
 
-        <div className="grid gap-14 pt-10 pb-12 md:pt-14 lg:pb-16 xl:grid-cols-12 xl:items-center xl:gap-8">
+        <div className="grid gap-12 pt-8 pb-10 md:pt-10 lg:pb-12 xl:grid-cols-12 xl:items-center xl:gap-8">
           <div className="flex flex-col xl:col-span-5">
-            <p data-hero="fade" className="flex items-center gap-2.5 text-[0.9rem] text-muted">
+            <p data-hero="fade" className="flex items-center gap-2.5 text-[1rem] text-muted">
               <span aria-hidden="true" className="size-2 rounded-full bg-olive" />
-              Available for new opportunities
+              Looking for opportunities
             </p>
 
             <h1 id="hero-title" className="display mt-6 text-[clamp(3.1rem,15vw,8.5rem)] leading-[0.88] md:text-[clamp(4rem,12vw,8.5rem)] xl:text-[clamp(3.8rem,6vw,6.75rem)]">
@@ -86,7 +86,7 @@ export function HeroSection() {
                 Get in touch <ArrowRight size={18} aria-hidden="true" className="arrow-r" />
               </PushButton>
               <PushButton href={profile.resume} download={profile.resumeFileName} variant="key">
-                Résumé <span className="font-mono text-[0.84rem] text-muted">PDF</span>
+                Résumé <span className="text-[0.9rem] text-muted">PDF</span>
                 <Download size={17} aria-hidden="true" className="arrow-d" />
               </PushButton>
             </div>
@@ -100,20 +100,19 @@ export function HeroSection() {
         <nav
           data-hero="strip"
           aria-label="Contents"
-          className="hidden items-center gap-8 border-t border-ink py-4 md:flex"
+          className="hidden items-center gap-10 border-t border-ink py-4 md:flex"
         >
-          <span className="label !text-ink">Contents</span>
-          <ul className="flex flex-wrap gap-x-7 gap-y-2 text-[0.92rem]">
+          <span className="font-serif text-[1.2rem] italic">Contents</span>
+          <ul className="flex flex-wrap gap-x-8 gap-y-2 text-[1.08rem]">
             {navItems.map((item) => (
               <li key={item.id}>
-                <a href={`#${item.id}`} className="group inline-flex items-baseline gap-1.5 text-ink transition-colors hover:text-accent-ink">
-                  <span className="font-mono text-[0.8rem] text-muted transition-colors group-hover:text-accent-ink">{item.index}</span>
-                  <span className="link-underline">{item.label}</span>
+                <a href={`#${item.id}`} className="link-underline text-ink transition-colors hover:text-accent-ink">
+                  {item.label}
                 </a>
               </li>
             ))}
           </ul>
-          <a href="#about" className="ml-auto inline-flex min-h-11 items-center gap-2 text-[0.85rem] text-muted transition-colors hover:text-ink">
+          <a href="#about" className="ml-auto inline-flex min-h-11 items-center gap-2 text-[1rem] text-muted transition-colors hover:text-ink">
             Scroll <ArrowDown size={15} aria-hidden="true" className="motion-safe:animate-bounce [animation-duration:2.4s]" />
           </a>
         </nav>

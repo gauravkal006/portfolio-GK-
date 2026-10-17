@@ -29,7 +29,7 @@ export function FeaturedProjects() {
   }, []);
 
   return (
-    <section ref={ref} id="projects" aria-labelledby="projects-title" className="relative py-20 md:py-28">
+    <section ref={ref} id="projects" aria-labelledby="projects-title" className="relative py-14 md:py-20">
       <div className="container-page">
         <SectionHeading
           index="03"
@@ -41,11 +41,10 @@ export function FeaturedProjects() {
               Things I've <em className="text-accent">built</em>
             </>
           }
-          note="Open any card to see what the project does, what I built and where to find the code."
         />
 
         <LayoutGroup>
-          <div role="group" aria-label="Filter projects by category" className="nav-dock mb-10 inline-flex flex-wrap rounded-[1.6rem] sm:rounded-full">
+          <div role="group" aria-label="Filter projects by category" className="nav-dock mb-7 inline-flex flex-wrap rounded-[1.6rem] sm:rounded-full">
             {filters.map((f) => (
               <button
                 key={f}
@@ -68,7 +67,8 @@ export function FeaturedProjects() {
           </div>
 
           <p className="sr-only" aria-live="polite">{`Showing ${visible.length} project${visible.length === 1 ? "" : "s"}`}</p>
-          <motion.ul layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 [grid-auto-flow:dense]">
+          <p className="mb-3 text-[0.92rem] text-muted md:hidden">Swipe to browse →</p>
+          <motion.ul layout className="grid gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3 swipe-row max-md:-mx-4 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:scroll-px-4 max-md:overflow-x-auto max-md:px-4 max-md:py-2">
             <AnimatePresence mode="popLayout">
               {visible.map((project) => (
                 <ProjectCard
@@ -80,7 +80,7 @@ export function FeaturedProjects() {
                 />
               ))}
             </AnimatePresence>
-            <motion.li layout key="more">
+            <motion.li layout key="more" className="max-md:w-[84%] max-md:shrink-0 max-md:snap-start">
               <a
                 href={`${profile.github}?tab=repositories`}
                 target="_blank"

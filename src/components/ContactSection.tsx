@@ -61,22 +61,22 @@ export function ContactSection() {
   ];
 
   return (
-    <section ref={ref} id="contact" aria-labelledby="contact-title" className="relative overflow-hidden bg-cover pt-20 pb-16 text-cover-ink md:pt-28">
+    <section ref={ref} id="contact" aria-labelledby="contact-title" className="relative overflow-hidden bg-cover pt-14 pb-12 text-cover-ink md:pt-20">
       <Sunburst rays={28} core={false} className="pointer-events-none absolute -top-40 -right-40 size-[30rem] text-mustard opacity-[0.16] md:-top-48 md:-right-24 md:size-[40rem]" />
 
       <div className="container-page relative">
         <div className="relative flex items-baseline gap-4 pt-3">
           <span data-rule aria-hidden="true" className="absolute inset-x-0 top-0 h-px origin-left bg-cover-ink" />
-          <span className="font-mono text-[0.84rem] font-medium text-accent-inv">Nº 07</span>
+          <span className="font-serif text-[1.1rem] italic text-accent-inv">No. 08</span>
           <span className="label !text-cover-ink/70">Contact</span>
           <span className="label ml-auto hidden !text-cover-ink/70 sm:block">{profile.location}, India</span>
         </div>
 
-        <h2 id="contact-title" data-reveal className="display mt-10 max-w-[12ch] text-[clamp(3rem,9vw,7.5rem)] leading-[0.92]">
+        <h2 id="contact-title" data-reveal className="display mt-6 max-w-[12ch] text-[clamp(2.6rem,6.5vw,5.25rem)] leading-[0.95]">
           Have something <em className="text-accent-inv">in mind?</em>
         </h2>
 
-        <div className="mt-14 grid gap-16 md:grid-cols-12 md:gap-6">
+        <div className="mt-9 grid gap-12 md:grid-cols-12 md:gap-6">
           <div data-reveal className="md:col-span-6">
             <p className="max-w-md text-[1.08rem] text-cover-ink/75">
               I'm always glad to talk about ideas, collaborations, internships and opportunities to build something useful. Email is

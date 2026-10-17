@@ -12,7 +12,7 @@ const contents = [
   { label: "Education", value: "B.Tech CSE (CGPA 8.1) · Diploma in IT (88.84%)" },
   { label: "Projects", value: featuredProjects.map((p) => p.name).join(" · ") },
   { label: "Skills", value: "Java, Spring Boot, REST APIs, SQL, Python, JavaScript" },
-  { label: "Certifications", value: certifications.map((c) => c.issuer).join(" · ") },
+  { label: "Certifications", value: Array.from(new Set(certifications.map((c) => c.issuer.split(" · ")[0]))).join(" · ") },
 ];
 
 export function ResumeSection() {
@@ -33,10 +33,10 @@ export function ResumeSection() {
 
 
   return (
-    <section ref={ref} id="resume" aria-labelledby="resume-title" className="relative py-20 md:py-28">
+    <section ref={ref} id="resume" aria-labelledby="resume-title" className="relative py-14 md:py-20">
       <div className="container-page">
         <SectionHeading
-          index="06"
+          index="07"
           kicker="Résumé"
           aside="PDF · 1 page"
           id="resume-title"
@@ -90,7 +90,7 @@ export function ResumeSection() {
               <div className="mx-auto mt-2 h-px w-32 bg-line-strong" />
               {["Education", "Technical skills", "Projects"].map((h, i) => (
                 <div key={h} className="mt-5">
-                  <p className="border-b border-line pb-1 font-mono text-[0.8rem] tracking-wider text-muted uppercase">{h}</p>
+                  <p className="border-b border-line pb-1 text-[0.85rem] text-muted">{h}</p>
                   {Array.from({ length: i === 2 ? 4 : 3 }, (_, j) => (
                     <div key={j} className="mt-1.5 h-[3px] bg-paper-2" style={{ width: `${92 - ((j * 17 + i * 9) % 35)}%` }} />
                   ))}

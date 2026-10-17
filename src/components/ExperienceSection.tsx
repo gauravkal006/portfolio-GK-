@@ -1,16 +1,14 @@
 import { useRef } from "react";
-import { activities, certifications, education, experience, type TimelineItem } from "../data/experience";
+import { activities, education, experience, type TimelineItem } from "../data/experience";
 import { useSectionReveal } from "../hooks/useSectionReveal";
+import { openCertificate } from "../lib/certViewer";
 import { Glyph, type GlyphShape } from "./Motif";
 import { SectionHeading } from "./SectionHeading";
-
-const certificationRows: TimelineItem[] = certifications.map((c) => ({ period: c.issuer, title: c.name, org: c.issuer }));
 
 const groups: { title: string; glyph: GlyphShape; items: TimelineItem[]; hideOrg?: boolean }[] = [
   { title: "Experience", glyph: "circle", items: experience },
   { title: "Education", glyph: "arch", items: education },
   { title: "Activities", glyph: "triangle", items: activities },
-  { title: "Certifications", glyph: "half", items: certificationRows, hideOrg: true },
 ];
 
 /** One ruled block of the journey: group name in the margin, entries as date / role / detail rows. */
@@ -37,7 +35,22 @@ function Group({ title, glyph, items, hideOrg }: (typeof groups)[number]) {
                 </p>
               )}
             </div>
-            {item.detail && <p className="text-[0.95rem] text-muted sm:col-start-2 lg:col-start-3 lg:pt-1">{item.detail}</p>}
+            {(item.detail || item.certificate) && (
+              <div className="sm:col-start-2 lg:col-start-3 lg:pt-1">
+                {item.detail && <p className="text-[0.95rem] text-muted">{item.detail}</p>}
+                {item.certificate && (
+                  <button
+                    type="button"
+                    aria-haspopup="dialog"
+                    onClick={(e) => openCertificate(item.certificate!, e.currentTarget)}
+                    className="cert-thumb group mt-3"
+                  >
+                    <img src={item.certificate.image} alt="" loading="lazy" className="h-12 w-16 rounded-[6px] object-cover object-top" />
+                    <span className="text-[0.92rem] font-medium transition-colors group-hover:text-accent-ink">View certificate</span>
+                  </button>
+                )}
+              </div>
+            )}
           </li>
         ))}
       </ol>
@@ -50,7 +63,7 @@ export function ExperienceSection() {
   useSectionReveal(ref);
 
   return (
-    <section ref={ref} id="experience" aria-labelledby="experience-title" className="relative py-20 md:py-28">
+    <section ref={ref} id="experience" aria-labelledby="experience-title" className="relative py-14 md:py-20">
       <div className="container-page">
         <SectionHeading
           index="05"
@@ -62,10 +75,9 @@ export function ExperienceSection() {
               Experience &amp; <em className="text-accent">education</em>
             </>
           }
-          note="Where I've worked, what I've studied, and what I've picked up along the way."
         />
 
-        <div className="space-y-14">
+        <div className="space-y-9">
           {groups.map((g) => (
             <Group key={g.title} {...g} />
           ))}
