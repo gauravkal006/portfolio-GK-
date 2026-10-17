@@ -1,198 +1,181 @@
 import { useRef, useState } from "react";
-import { ArrowDown, Download, Mail } from "lucide-react";
-import { profile } from "../data/profile";
-import { finePointer, gsap, INTRO_DELAY, MOTION_OK, useGSAP } from "../lib/gsap";
-import { GitHubIcon, LinkedInIcon } from "./BrandIcons";
-import { ProfilePhoto } from "./ProfilePhoto";
-
-const nameLines = ["Gaurav", "Kalamkhede"];
+import { ArrowDown, ArrowRight, Download } from "lucide-react";
+import { navItems, profile } from "../data/profile";
+import { gsap, MOTION_OK, useGSAP } from "../lib/gsap";
+import { onIntroDone } from "../lib/intro";
+import { sunburstPath } from "./Motif";
+import { HeroStage } from "./HeroStage";
+import { HoloCard } from "./HoloCard";
+import { PushButton } from "./PushButton";
 
 export function HeroSection() {
   const root = useRef<HTMLElement>(null);
-  const roleRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        const tl = gsap.timeline({ delay: INTRO_DELAY, defaults: { ease: "power4.out", duration: 1 } });
-        tl.from("[data-hero='eyebrow']", { autoAlpha: 0, y: 14, duration: 0.7 })
-          .from("[data-hero='word']", { yPercent: 115, duration: 1.1, stagger: 0.09 }, "-=0.4")
-          .from("[data-hero='fade']", { autoAlpha: 0, y: 18, stagger: 0.08, duration: 0.8 }, "-=0.7")
-          .from("[data-hero='panel']", { autoAlpha: 0, y: 40, scale: 0.96, duration: 1.2 }, 0.3)
-          .from("[data-hero='panel'] [data-photo-inner]", { scale: 1.15, duration: 1.6, ease: "power3.out" }, 0.3)
-          .from("[data-hero='chip']", { autoAlpha: 0, scale: 0.85, stagger: 0.12, duration: 0.6, ease: "back.out(2)" }, 1.2)
-          .from("[data-hero='scroll']", { autoAlpha: 0, duration: 0.6 }, 1.4);
+        const has = (sel: string) => root.current!.querySelector(sel) !== null;
+        // Paused until the first-visit intro lifts (plays at once when there is no intro).
+        const tl = gsap.timeline({ paused: true, defaults: { ease: "power4.out", duration: 1 } });
+        tl.from("[data-hero='mast']", { autoAlpha: 0, y: -8, duration: 0.6 })
+          .from("[data-hero='word']", { yPercent: 108, duration: 1.15, stagger: 0.1 }, 0.1)
+          .from("[data-hero='fade']", { autoAlpha: 0, y: 16, stagger: 0.08, duration: 0.8 }, 0.55)
+          .from("[data-hero='strip']", { autoAlpha: 0, duration: 0.7 }, 0.9);
 
-        gsap.utils.toArray<HTMLElement>("[data-float]").forEach((chip, i) => {
-          gsap.to(chip, { y: i % 2 ? 8 : -8, duration: 3 + i * 0.6, ease: "sine.inOut", repeat: -1, yoyo: true, delay: INTRO_DELAY + 1.8 });
-        });
+        if (has("[data-hero='sun']")) tl.from("[data-hero='sun']", { y: 70, duration: 1.8, ease: "power3.out" }, 0.55);
+        if (has("[data-hero='portrait']")) tl.from("[data-hero='portrait']", { scale: 1.08, transformOrigin: "50% 40%", duration: 1.8, ease: "power3.out" }, 0.15);
 
-        // Fade the scroll cue and ease the visual upward as the hero leaves.
-        gsap.to("[data-hero='scroll']", {
-          autoAlpha: 0,
-          scrollTrigger: { trigger: root.current, start: "top top", end: "20% top", scrub: true },
-        });
+        // The small moon drifts gently; the rays turn slowly via CSS.
+        if (has("[data-hero='moon']")) gsap.to("[data-hero='moon']", { y: -10, duration: 4, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.5 });
+        const off = onIntroDone(() => tl.play());
+
         gsap.to("[data-hero='visual']", {
-          yPercent: -8,
+          yPercent: -6,
           ease: "none",
           scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
         });
-
-        // Typing role cycle, written straight to the DOM so React does not re-render each character.
-        const el = roleRef.current;
-        if (el) {
-          let index = 0;
-          const cycle = () => {
-            const current = profile.roles[index];
-            index = (index + 1) % profile.roles.length;
-            const next = profile.roles[index];
-            const erase = { n: current.length };
-            const type = { n: 0 };
-            gsap
-              .timeline({ onComplete: () => void gsap.delayedCall(1.8, cycle) })
-              .to(erase, { n: 0, duration: current.length * 0.022, ease: "none", onUpdate: () => void (el.textContent = current.slice(0, Math.ceil(erase.n))) })
-              .to(type, { n: next.length, duration: next.length * 0.045, ease: "none", onUpdate: () => void (el.textContent = next.slice(0, Math.ceil(type.n))) }, "+=0.15");
-          };
-          gsap.delayedCall(INTRO_DELAY + 2.6, cycle);
-        }
-
-        // Floating chips drift slightly against the pointer on desktop (the photo card tilts itself).
-        if (finePointer()) {
-          const chips = gsap.utils.toArray<HTMLElement>("[data-hero='chip']").map((chip) => ({
-            x: gsap.quickTo(chip, "x", { duration: 1, ease: "power3.out" }),
-            y: gsap.quickTo(chip, "y", { duration: 1, ease: "power3.out" }),
-          }));
-          const onMove = (event: PointerEvent) => {
-            const px = event.clientX / window.innerWidth - 0.5;
-            const py = event.clientY / window.innerHeight - 0.5;
-            chips.forEach((c, i) => {
-              c.x(px * (14 + i * 8));
-              c.y(py * (14 + i * 8));
-            });
-          };
-          const section = root.current!;
-          section.addEventListener("pointermove", onMove);
-          return () => section.removeEventListener("pointermove", onMove);
-        }
+        return off;
       });
     },
     { scope: root },
   );
 
   return (
-    <section
-      ref={root}
-      id="top"
-      aria-labelledby="hero-title"
-      className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-16 md:pt-32 md:pb-24"
-    >
-      <div className="container-page grid grid-cols-[minmax(0,1fr)] items-center gap-14 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] md:gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10">
-        <div>
-          <div data-hero="eyebrow" className="flex items-center gap-3">
-            <MobileAvatar />
-          <p className="inline-flex items-center gap-2.5 rounded-full border border-line bg-white/[0.03] py-1.5 pr-3.5 pl-3 text-[0.8rem] text-muted">
-            <span className="relative flex size-2">
-              <span className="pulse-ring absolute inset-0 rounded-full bg-lime" />
-              <span className="relative size-2 rounded-full bg-lime" />
-            </span>
-            Available for new opportunities
-          </p>
-          </div>
+    <section ref={root} id="top" aria-labelledby="hero-title" className="relative pt-[4.5rem] md:pt-20">
+      <div className="container-page">
+        <div data-hero="mast" className="label flex items-center justify-between gap-4 border-b border-ink py-3 !text-ink">
+          <span>Portfolio · {new Date().getFullYear()}</span>
+          <span className="hidden md:block">B.Tech Computer Science · PRMITR</span>
+          <span>{profile.location}</span>
+        </div>
 
-          <h1 id="hero-title" className="mt-7 text-[clamp(2.9rem,10.5vw,6.25rem)] md:text-[clamp(2.9rem,6.6vw,6.25rem)] leading-[0.92] font-semibold tracking-[-0.055em]">
-            <span className="sr-only">{profile.name}</span>
-            {nameLines.map((line, i) => (
-              <span key={line} aria-hidden="true" className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
-                <span data-hero="word" className={`inline-block ${i === 1 ? "bg-gradient-to-r from-ink via-ink to-accent bg-clip-text text-transparent" : ""}`}>
-                  {line}
-                  {i === 1 && <span className="text-accent">.</span>}
+        <div className="grid gap-14 pt-10 pb-12 md:pt-14 lg:pb-16 xl:grid-cols-12 xl:items-center xl:gap-8">
+          <div className="flex flex-col xl:col-span-5">
+            <p data-hero="fade" className="flex items-center gap-2.5 text-[0.9rem] text-muted">
+              <span aria-hidden="true" className="size-2 rounded-full bg-olive" />
+              Available for new opportunities
+            </p>
+
+            <h1 id="hero-title" className="display mt-6 text-[clamp(3.1rem,15vw,8.5rem)] leading-[0.88] md:text-[clamp(4rem,12vw,8.5rem)] xl:text-[clamp(3.8rem,6vw,6.75rem)]">
+              <span className="sr-only">{profile.name}</span>
+              <span aria-hidden="true" className="block overflow-hidden pb-[0.06em]">
+                <span data-hero="word" className="inline-block">Gaurav</span>
+              </span>
+              <span aria-hidden="true" className="block overflow-hidden pb-[0.12em] pl-[0.45em]">
+                <span data-hero="word" className="inline-block italic text-accent [font-variation-settings:'SOFT'_100,'opsz'_144]">
+                  Kalamkhede
                 </span>
               </span>
+            </h1>
+
+            <div className="mt-8 grid max-w-3xl gap-5 md:grid-cols-2 md:gap-8 xl:grid-cols-1 xl:gap-5">
+              <p data-hero="fade" className="display text-[clamp(1.45rem,2.4vw,2rem)] leading-[1.16] tracking-[-0.015em]">
+                {profile.statement} <em className="text-accent-ink">{profile.statementEm}</em>
+              </p>
+              <p data-hero="fade" className="text-[1.02rem] leading-relaxed text-muted lg:pt-1.5">
+                {profile.intro}
+              </p>
+            </div>
+
+            <div data-hero="fade" className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-5">
+              <PushButton href="#projects" variant="primary">
+                Explore my work <ArrowRight size={18} aria-hidden="true" className="arrow-r" />
+              </PushButton>
+              <PushButton href="#contact" variant="key">
+                Get in touch <ArrowRight size={18} aria-hidden="true" className="arrow-r" />
+              </PushButton>
+              <PushButton href={profile.resume} download={profile.resumeFileName} variant="key">
+                Résumé <span className="font-mono text-[0.84rem] text-muted">PDF</span>
+                <Download size={17} aria-hidden="true" className="arrow-d" />
+              </PushButton>
+            </div>
+          </div>
+
+          <div data-hero="visual" className="xl:col-span-7">
+            <HeroStage>{profile.photo ? <HoloCard /> : <HeroArt />}</HeroStage>
+          </div>
+        </div>
+
+        <nav
+          data-hero="strip"
+          aria-label="Contents"
+          className="hidden items-center gap-8 border-t border-ink py-4 md:flex"
+        >
+          <span className="label !text-ink">Contents</span>
+          <ul className="flex flex-wrap gap-x-7 gap-y-2 text-[0.92rem]">
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <a href={`#${item.id}`} className="group inline-flex items-baseline gap-1.5 text-ink transition-colors hover:text-accent-ink">
+                  <span className="font-mono text-[0.8rem] text-muted transition-colors group-hover:text-accent-ink">{item.index}</span>
+                  <span className="link-underline">{item.label}</span>
+                </a>
+              </li>
             ))}
-          </h1>
-
-          <p data-hero="fade" className="mt-6 flex min-h-[1.6em] items-center font-mono text-[clamp(0.95rem,2.2vw,1.15rem)] text-accent">
-            <span aria-hidden="true" className="mr-2 text-subtle">&gt;</span>
-            <span className="sr-only">{profile.title}</span>
-            <span ref={roleRef} aria-hidden="true">{profile.roles[0]}</span>
-            <span aria-hidden="true" className="caret ml-0.5 inline-block h-[1.1em] w-[2px] translate-y-px bg-accent" />
-          </p>
-
-          <p data-hero="fade" className="mt-5 max-w-[34rem] text-[1.05rem] leading-relaxed text-muted sm:text-[1.1rem]">
-            {profile.intro}
-          </p>
-
-          <div data-hero="fade" className="mt-9 flex flex-wrap gap-3">
-            <a href="#projects" className="btn btn-primary">
-              View projects <ArrowDown size={17} aria-hidden="true" className="arrow-d" />
-            </a>
-            <a href={profile.resume} download={profile.resumeFileName} className="btn btn-ghost">
-              <Download size={16} aria-hidden="true" className="arrow-d" /> Download resume
-            </a>
-          </div>
-
-          <ul data-hero="fade" className="mt-8 flex items-center gap-1 text-muted" aria-label="Profiles">
-            <li>
-              <a href={profile.github} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center gap-2 rounded-full px-3 text-sm transition-colors hover:bg-white/5 hover:text-ink" aria-label="GitHub (opens in a new tab)">
-                <GitHubIcon size={17} /> GitHub
-              </a>
-            </li>
-            <li>
-              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center gap-2 rounded-full px-3 text-sm transition-colors hover:bg-white/5 hover:text-ink" aria-label="LinkedIn (opens in a new tab)">
-                <LinkedInIcon size={17} /> LinkedIn
-              </a>
-            </li>
-            <li>
-              <a href={`mailto:${profile.email}`} className="flex min-h-11 items-center gap-2 rounded-full px-3 text-sm transition-colors hover:bg-white/5 hover:text-ink">
-                <Mail size={17} aria-hidden="true" /> Email
-              </a>
-            </li>
           </ul>
-        </div>
-
-        <div data-hero="visual" className="relative ml-auto hidden w-full max-w-[25rem] md:block">
-          <div data-hero="panel">
-            <ProfilePhoto reveal={false} priority />
-          </div>
-
-          <div data-hero="chip" aria-hidden="true" className="absolute top-16 -left-10 hidden lg:block">
-            <div data-float className="rounded-xl border border-line-strong bg-surface-2/90 px-3.5 py-2 font-mono text-[0.72rem] text-ink shadow-xl backdrop-blur-md">
-              <span className="text-accent">●</span> Java · Spring Boot
-            </div>
-          </div>
-          <div data-hero="chip" aria-hidden="true" className="absolute bottom-24 -right-10 hidden lg:block">
-            <div data-float className="rounded-xl border border-line-strong bg-surface-2/90 px-3.5 py-2 font-mono text-[0.72rem] text-ink shadow-xl backdrop-blur-md">
-              <span className="text-accent-2">●</span> RAG · OCR · LLM
-            </div>
-          </div>
-        </div>
+          <a href="#about" className="ml-auto inline-flex min-h-11 items-center gap-2 text-[0.85rem] text-muted transition-colors hover:text-ink">
+            Scroll <ArrowDown size={15} aria-hidden="true" className="motion-safe:animate-bounce [animation-duration:2.4s]" />
+          </a>
+        </nav>
       </div>
-
-      <a
-        href="#about"
-        data-hero="scroll"
-        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.7rem] tracking-[0.2em] text-subtle uppercase transition-colors hover:text-ink md:flex"
-      >
-        <span className="flex h-9 w-5.5 justify-center rounded-full border border-line-strong pt-1.5">
-          <span className="scroll-dot size-1 rounded-full bg-accent" />
-        </span>
-        Scroll
-      </a>
     </section>
   );
 }
 
-/** Small round portrait shown beside the status pill on phones, where the photo card is hidden. */
-function MobileAvatar() {
+const rays = sunburstPath(36, 340, 200, 330);
+
+/** Arch-framed cover illustration: the profile photo when one is set, otherwise a geometric sunrise. */
+function HeroArt() {
   const [failed, setFailed] = useState(false);
+  const photo = profile.photo && !failed ? profile.photo : null;
+
   return (
-    <span className="relative grid size-12 shrink-0 place-items-center overflow-hidden rounded-full border border-accent/40 bg-surface-2 md:hidden">
-      {profile.photo && !failed ? (
-        <img src={profile.photo} alt={`Portrait of ${profile.name}`} width={96} height={96} onError={() => setFailed(true)} className="h-full w-full object-cover" />
-      ) : (
-        <span aria-hidden="true" className="font-display text-sm font-semibold text-accent">{profile.initials}</span>
-      )}
-    </span>
+    <svg
+      viewBox="0 0 400 500"
+      className="block h-auto w-full"
+      {...(photo ? { role: "img", "aria-label": `Portrait of ${profile.name}` } : { "aria-hidden": true })}
+    >
+      <defs>
+        <clipPath id="hero-arch">
+          <path d="M20 500V200a180 180 0 0 1 360 0v300z" />
+        </clipPath>
+      </defs>
+
+      <g clipPath="url(#hero-arch)">
+        <rect width="400" height="500" fill="var(--color-paper-2)" />
+        {photo ? (
+          <image
+            data-hero="portrait"
+            href={photo}
+            x="20"
+            y="20"
+            width="360"
+            height="480"
+            preserveAspectRatio="xMidYMid slice"
+            onError={() => setFailed(true)}
+          />
+        ) : (
+          <>
+            <path d={rays} fill="var(--color-mustard)" fillOpacity="0.42" className="sun-spin" />
+            <g data-hero="sun">
+              <circle cx="200" cy="330" r="104" fill="var(--color-accent)" />
+              {[
+                [344, 4],
+                [366, 6],
+                [390, 8],
+                [416, 10],
+              ].map(([y, h]) => (
+                <rect key={y} x="80" y={y} width="240" height={h} fill="var(--color-paper-2)" />
+              ))}
+            </g>
+            <path d="M20 428c60-34 120-36 190-8s120 14 170-6v86H20z" fill="var(--color-olive)" />
+            <path d="M20 466c90-22 210-26 360 4v30H20z" fill="var(--color-ink)" />
+          </>
+        )}
+      </g>
+
+      <path d="M20 500V200a180 180 0 0 1 360 0v300" fill="none" stroke="var(--color-ink)" strokeWidth="1.5" />
+      <circle data-hero="moon" cx="352" cy="58" r="13" fill="var(--color-mustard)" />
+    </svg>
   );
 }

@@ -1,15 +1,12 @@
 import { useRef } from "react";
-import { BookOpen, GraduationCap, MapPin, Sparkles } from "lucide-react";
-import { CodeCard } from "./CodeCard";
 import { useSectionReveal } from "../hooks/useSectionReveal";
-import { spotlightMove } from "../lib/spotlight";
 import { SectionHeading } from "./SectionHeading";
 
 const facts = [
-  { icon: GraduationCap, label: "Studying", value: "B.Tech, Computer Science Engineering", sub: "PRMITR, Amravati · CGPA 8.1" },
-  { icon: BookOpen, label: "Before that", value: "Diploma in Information Technology", sub: "Government Polytechnic, Amravati · 88.84%" },
-  { icon: Sparkles, label: "Recently built", value: "Validify & DocBlendAI", sub: "Azure-backed verification and document QA" },
-  { icon: MapPin, label: "Based in", value: "Amravati, Maharashtra", sub: "India" },
+  { label: "Studying", value: "B.Tech, Computer Science Engineering", sub: "PRMITR, Amravati · CGPA 8.1" },
+  { label: "Before that", value: "Diploma in Information Technology", sub: "Government Polytechnic, Amravati · 88.84%" },
+  { label: "Recently built", value: "Validify & DocBlendAI", sub: "Azure-backed verification and document QA" },
+  { label: "Based in", value: "Amravati, Maharashtra", sub: "India" },
 ];
 
 export function AboutSection() {
@@ -22,45 +19,51 @@ export function AboutSection() {
         <SectionHeading
           index="01"
           kicker="About"
+          aside="A short introduction"
           id="about-title"
-          title={<>Curious by nature.<br className="hidden sm:block" /> <span className="text-muted">Builder by choice.</span></>}
+          title={
+            <>
+              Curious by nature. <br className="hidden sm:block" />
+              <em className="text-accent">Builder</em> by choice.
+            </>
+          }
         />
 
-        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
-          <div data-reveal className="order-last lg:order-none">
-            <CodeCard />
+        <div className="grid gap-14 md:grid-cols-12 md:gap-6">
+          <div data-reveal className="space-y-6 text-[1.1rem] leading-[1.75] md:col-span-7 md:col-start-6 md:row-start-1 lg:col-span-6 lg:col-start-6">
+            <p className="dropcap">
+              My name is Gaurav, and I'm a Computer Science Engineering student at Prof. Ram Meghe Institute of Technology and Research in
+              Amravati. I came to the degree after a Diploma in Information Technology, and the things that keep pulling me in
+              are software development, AI/ML and a good problem to solve.
+            </p>
+            <p className="text-muted">
+              Most of what I build sits where web development, databases and AI meet: a Google Drive-style storage app, a
+              certificate verification platform on Azure, and a question-answering assistant that can read handwritten notes.
+              Lately that has meant <span className="text-ink">document intelligence</span>,{" "}
+              <span className="text-ink">secure cloud backends</span> and <span className="text-ink">full-stack Java</span>.
+            </p>
+            <p className="text-muted">
+              Along the way I interned as a Java full-stack developer at Compilers Technologies and built prototypes at 24-hour
+              hackathons. If you have an idea, a collaboration or an opportunity to build something useful, I'd be glad to hear
+              about it.
+            </p>
+            <p className="pt-2 font-serif text-[1rem] italic text-accent-ink">
+              <a href="#projects" className="link-underline">↳ The work itself is in Nº 03.</a>
+            </p>
           </div>
 
-          <div data-reveal className="space-y-5 text-[1.05rem] leading-[1.8] text-muted">
-            <p>
-              I'm <strong className="font-medium text-ink">Gaurav</strong>, a Computer Science Engineering student at Prof. Ram Meghe
-              Institute of Technology and Research, coming in after a Diploma in Information Technology. I'm interested in software
-              development, AI/ML and problem-solving.
-            </p>
-            <p>
-              I enjoy building practical projects that bring AI, web technologies and databases together, from a Google Drive-style
-              storage app to a question-answering assistant that can read handwritten notes. Lately that has meant{" "}
-              <strong className="font-medium text-ink">document intelligence</strong>,{" "}
-              <strong className="font-medium text-ink">secure cloud backends</strong> and{" "}
-              <strong className="font-medium text-ink">full-stack Java</strong>.
-            </p>
-            <p>
-              I've also spent time as a Java full-stack intern at Compilers Technologies and building prototypes at 24-hour hackathons.
-              I'm always glad to talk about ideas, collaborations and opportunities to build something useful.
-            </p>
-          </div>
+          <dl data-stagger className="border-t border-ink md:col-span-4 md:col-start-1 md:row-start-1" aria-label="Quick facts">
+            {facts.map(({ label, value, sub }) => (
+              <div key={label} className="grid grid-cols-[7rem_minmax(0,1fr)] gap-4 border-b border-line py-4 md:grid-cols-1 md:gap-1 lg:grid-cols-[7rem_minmax(0,1fr)] lg:gap-4">
+                <dt className="label pt-1">{label}</dt>
+                <dd>
+                  <span className="block font-serif text-[1.12rem] leading-snug">{value}</span>
+                  <span className="mt-0.5 block text-[0.88rem] text-muted">{sub}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
-
-        <ul data-stagger className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label="Quick facts">
-          {facts.map(({ icon: Icon, label, value, sub }) => (
-            <li key={label} onPointerMove={spotlightMove} className="panel spotlight p-5 transition-colors hover:border-line-strong">
-              <Icon size={18} className="text-accent" aria-hidden="true" />
-              <p className="mt-4 font-mono text-[0.7rem] tracking-[0.08em] text-subtle uppercase">{label}</p>
-              <p className="mt-1 font-display text-[1.05rem] leading-snug font-medium text-ink">{value}</p>
-              <p className="mt-1.5 text-sm text-muted">{sub}</p>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );

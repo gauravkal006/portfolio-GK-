@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUpRight, CircleAlert, Clock, GitFork, RefreshCw, Star } from "lucide-react";
+import { ArrowUpRight, RefreshCw } from "lucide-react";
 import { profile } from "../data/profile";
 import { useSectionReveal } from "../hooks/useSectionReveal";
-import { spotlightMove } from "../lib/spotlight";
-import { GitHubIcon } from "./BrandIcons";
 import { SectionHeading } from "./SectionHeading";
 
 type Repo = {
@@ -23,16 +21,9 @@ const CACHE_KEY = "gh-activity-v1";
 const CACHE_MS = 60 * 60 * 1000;
 const API = "https://api.github.com";
 
-const langColor: Record<string, string> = {
-  JavaScript: "#f1e05a",
-  TypeScript: "#3178c6",
-  Python: "#3572A5",
-  Java: "#b07219",
-  HTML: "#e34c26",
-  SCSS: "#c6538c",
-  "Jupyter Notebook": "#DA5B0B",
-  CSS: "#663399",
-};
+// Language swatches drawn from the site palette, assigned by rank so the bar always harmonises.
+const swatches = ["var(--color-accent)", "var(--color-olive)", "var(--color-mustard)", "var(--color-slate)", "var(--color-ink)", "var(--color-line-strong)"];
+const swatch = (rank: number) => swatches[Math.min(rank, swatches.length - 1)];
 
 function readCache(): GitHubData | null {
   try {
@@ -126,7 +117,9 @@ export function GitHubActivity() {
 
   const data = state.status === "ready" ? state.data : null;
   const languages = data ? languageBreakdown(data.repos) : [];
+  const rank = new Map(languages.map((l, i) => [l.name, i]));
   const totalStars = data ? data.repos.reduce((sum, r) => sum + r.stargazers_count, 0) : 0;
+  const loading = !data && state.status !== "error";
 
   return (
     <section ref={ref} id="github" aria-labelledby="github-title" className="relative py-20 md:py-28">
@@ -134,65 +127,61 @@ export function GitHubActivity() {
         <SectionHeading
           index="04"
           kicker="Open source"
+          aside="Updated on every visit"
           id="github-title"
-          title="Live from GitHub"
+          title={
+            <>
+              Live from <em className="text-accent">GitHub</em>
+            </>
+          }
           note="Pulled from GitHub's public API when you visit, so it is always current. Forks are left out."
         />
 
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.6fr)]" aria-busy={state.status === "loading"}>
-          <div data-reveal className="panel flex flex-col p-6 sm:p-7">
-            <div className="flex items-center gap-3">
-              <span className="grid size-11 place-items-center rounded-full border border-line-strong bg-white/[0.03]">
-                <GitHubIcon size={20} />
-              </span>
-              <div>
-                <p className="font-display font-semibold">{profile.githubUser}</p>
-                <p className="text-sm text-muted">{profile.name}</p>
-              </div>
-            </div>
-
-            <dl className="mt-7 grid grid-cols-2 gap-3">
-              <Stat label="Public repositories" value={data?.publicRepos} loading={!data && state.status !== "error"} />
-              <Stat label="Stars on own repos" value={data ? totalStars : undefined} loading={!data && state.status !== "error"} />
+        <div className="grid gap-14 md:grid-cols-12 md:gap-6" aria-busy={state.status === "loading"}>
+          <div data-reveal className="md:col-span-4">
+            <dl className="grid grid-cols-2 border-t border-ink">
+              <Stat label="Public repositories" value={data?.publicRepos} loading={loading} />
+              <Stat label="Stars on own repos" value={data ? totalStars : undefined} loading={loading} divider />
             </dl>
 
-            <div className="mt-7">
-              <p className="font-mono text-[0.7rem] tracking-[0.08em] text-subtle uppercase">Primary language by repo</p>
+            <div className="mt-8">
+              <p className="label">Primary language by repo</p>
               {data ? (
                 <>
-                  <div className="mt-3 flex h-2 overflow-hidden rounded-full bg-white/5" role="img" aria-label={languages.map((l) => `${l.name} ${l.count}`).join(", ")}>
-                    {languages.map((l) => (
-                      <span key={l.name} style={{ width: `${l.share}%`, background: langColor[l.name] ?? "#6f7781" }} />
+                  <div className="mt-3 flex h-3 overflow-hidden border border-ink" role="img" aria-label={languages.map((l) => `${l.name} ${l.count}`).join(", ")}>
+                    {languages.map((l, i) => (
+                      <span key={l.name} style={{ width: `${l.share}%`, background: swatch(i) }} />
                     ))}
                   </div>
-                  <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                    {languages.map((l) => (
+                  <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-[0.9rem]">
+                    {languages.map((l, i) => (
                       <li key={l.name} className="flex items-center gap-2 text-muted">
-                        <span className="size-2 shrink-0 rounded-full" style={{ background: langColor[l.name] ?? "#6f7781" }} aria-hidden="true" />
+                        <span className="size-2.5 shrink-0" style={{ background: swatch(i) }} aria-hidden="true" />
                         <span className="truncate">{l.name}</span>
-                        <span className="ml-auto font-mono text-xs text-subtle">{l.count}</span>
+                        <span className="ml-auto font-mono text-[0.82rem]">{l.count}</span>
                       </li>
                     ))}
                   </ul>
                 </>
               ) : (
-                <div className="skeleton mt-3 h-2 rounded-full" />
+                <div className="skeleton mt-3 h-3" />
               )}
             </div>
 
-            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="btn btn-ghost mt-8 self-start">
-              View GitHub profile <ArrowUpRight size={16} aria-hidden="true" className="arrow-ur" />
+            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="link-arrow mt-8">
+              github.com/{profile.githubUser} <ArrowUpRight size={16} aria-hidden="true" className="arrow-ur" />
+              <span className="sr-only">(opens in a new tab)</span>
             </a>
           </div>
 
-          <div data-reveal className="panel p-2 sm:p-3">
-            <div className="flex items-center justify-between px-3 pt-3 pb-2 sm:px-4">
-              <h3 className="font-display text-[1.05rem] font-semibold">Recently updated repositories</h3>
+          <div data-reveal className="md:col-span-8">
+            <div className="flex min-h-10 items-center justify-between border-b border-ink pb-1">
+              <h3 className="font-serif text-[1.25rem] italic">Recently updated repositories</h3>
               {data && (
                 <button
                   type="button"
                   onClick={load}
-                  className="grid size-9 place-items-center rounded-full text-subtle transition-colors hover:bg-white/5 hover:text-ink"
+                  className="grid size-10 place-items-center text-muted transition-colors hover:text-accent-ink"
                   aria-label="Refresh GitHub data"
                 >
                   <RefreshCw size={15} aria-hidden="true" />
@@ -201,69 +190,60 @@ export function GitHubActivity() {
             </div>
 
             {state.status === "error" ? (
-              <div role="alert" className="m-2 flex flex-col items-start gap-4 rounded-xl border border-line bg-white/[0.02] p-6">
-                <CircleAlert className="text-accent" size={22} aria-hidden="true" />
-                <div>
-                  <p className="font-medium">Couldn't load live GitHub data.</p>
-                  <p className="mt-1 text-sm text-muted">{state.message} The projects above are always available, and everything is on GitHub.</p>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={load} className="btn btn-ghost !min-h-10 !text-sm">
+              <div role="alert" className="border-b border-line py-8">
+                <p className="font-serif text-[1.25rem]">Couldn't load live GitHub data.</p>
+                <p className="mt-2 max-w-lg text-[0.95rem] text-muted">
+                  {state.message} The projects above are always available, and everything is on GitHub.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-x-7">
+                  <button type="button" onClick={load} className="link-arrow">
                     <RefreshCw size={15} aria-hidden="true" /> Try again
                   </button>
-                  <a href={`${profile.github}?tab=repositories`} target="_blank" rel="noopener noreferrer" className="btn btn-ghost !min-h-10 !text-sm">
+                  <a href={`${profile.github}?tab=repositories`} target="_blank" rel="noopener noreferrer" className="link-arrow">
                     Open on GitHub <ArrowUpRight size={15} aria-hidden="true" className="arrow-ur" />
+                    <span className="sr-only">(opens in a new tab)</span>
                   </a>
                 </div>
               </div>
             ) : data ? (
-              <ul className="grid grid-cols-[minmax(0,1fr)] gap-2 sm:grid-cols-2">
+              <ul className="grid sm:grid-cols-2 sm:gap-x-8">
                 {data.repos.slice(0, 8).map((repo) => (
-                  <li key={repo.name}>
-                    <a
-                      href={repo.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onPointerMove={spotlightMove}
-                      className="spotlight group relative flex h-full flex-col rounded-xl border border-transparent p-4 transition-colors hover:border-line hover:bg-white/[0.02]"
-                    >
+                  <li key={repo.name} className="border-b border-line">
+                    <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="group flex h-full flex-col py-4">
                       <span className="flex items-start justify-between gap-3">
-                        <span className="min-w-0 truncate font-mono text-[0.9rem] font-medium text-ink group-hover:text-accent" title={repo.name}>{repo.name}</span>
-                        <ArrowUpRight size={15} className="mt-0.5 shrink-0 text-subtle transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent" aria-hidden="true" />
+                        <span className="min-w-0 truncate font-mono text-[0.9rem] font-medium transition-colors group-hover:text-accent-ink" title={repo.name}>
+                          {repo.name}
+                        </span>
+                        <ArrowUpRight
+                          size={15}
+                          aria-hidden="true"
+                          className="mt-0.5 shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent-ink"
+                        />
+                        <span className="sr-only">(opens in a new tab)</span>
                       </span>
-                      {repo.description && <span className="mt-1.5 line-clamp-2 text-sm text-muted">{repo.description}</span>}
-                      <span className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-3 text-xs text-subtle">
+                      {repo.description && <span className="mt-1 line-clamp-2 text-[0.9rem] text-muted">{repo.description}</span>}
+                      <span className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2.5 font-mono text-[0.8rem] text-muted">
                         {repo.language && (
                           <span className="flex items-center gap-1.5">
-                            <span className="size-2 rounded-full" style={{ background: langColor[repo.language] ?? "#6f7781" }} aria-hidden="true" />
+                            <span className="size-2" style={{ background: swatch(rank.get(repo.language) ?? swatches.length) }} aria-hidden="true" />
                             {repo.language}
                           </span>
                         )}
-                        {repo.stargazers_count > 0 && (
-                          <span className="flex items-center gap-1" aria-label={`${repo.stargazers_count} stars`}>
-                            <Star size={12} aria-hidden="true" /> {repo.stargazers_count}
-                          </span>
-                        )}
-                        {repo.forks_count > 0 && (
-                          <span className="flex items-center gap-1" aria-label={`${repo.forks_count} forks`}>
-                            <GitFork size={12} aria-hidden="true" /> {repo.forks_count}
-                          </span>
-                        )}
-                        <span className="flex items-center gap-1">
-                          <Clock size={12} aria-hidden="true" /> Updated {relative(repo.pushed_at)}
-                        </span>
+                        {repo.stargazers_count > 0 && <span aria-label={`${repo.stargazers_count} stars`}>★ {repo.stargazers_count}</span>}
+                        {repo.forks_count > 0 && <span>{repo.forks_count} {repo.forks_count === 1 ? "fork" : "forks"}</span>}
+                        <span>Updated {relative(repo.pushed_at)}</span>
                       </span>
                     </a>
                   </li>
                 ))}
               </ul>
             ) : (
-              <ul className="grid gap-2 sm:grid-cols-2" aria-label="Loading repositories">
+              <ul className="grid sm:grid-cols-2 sm:gap-x-8" aria-label="Loading repositories">
                 {Array.from({ length: 6 }, (_, i) => (
-                  <li key={i} className="space-y-3 rounded-xl p-4">
-                    <div className="skeleton h-4 w-2/3 rounded" />
-                    <div className="skeleton h-3 w-full rounded" />
-                    <div className="skeleton h-3 w-1/2 rounded" />
+                  <li key={i} className="space-y-2.5 border-b border-line py-4">
+                    <div className="skeleton h-4 w-2/3" />
+                    <div className="skeleton h-3 w-full" />
+                    <div className="skeleton h-3 w-1/2" />
                   </li>
                 ))}
               </ul>
@@ -275,12 +255,12 @@ export function GitHubActivity() {
   );
 }
 
-function Stat({ label, value, loading }: { label: string; value?: number; loading: boolean }) {
+function Stat({ label, value, loading, divider = false }: { label: string; value?: number; loading: boolean; divider?: boolean }) {
   return (
-    <div className="rounded-xl border border-line bg-white/[0.02] p-4">
-      <dt className="text-xs text-muted">{label}</dt>
-      <dd className="mt-1 font-display text-2xl font-semibold">
-        {value !== undefined ? value : loading ? <span className="skeleton inline-block h-7 w-10 rounded align-middle" /> : "–"}
+    <div className={`flex flex-col justify-between border-b border-line py-4 pr-4 ${divider ? "border-l pl-4" : ""}`}>
+      <dt className="label">{label}</dt>
+      <dd className="display mt-2 text-[3rem] leading-none">
+        {value !== undefined ? value : loading ? <span className="skeleton inline-block h-10 w-14 align-middle" /> : "–"}
       </dd>
     </div>
   );

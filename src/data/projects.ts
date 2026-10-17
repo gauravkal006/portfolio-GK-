@@ -13,6 +13,11 @@ export type Project = {
   repo: string;
   demo?: string;
   featured?: boolean;
+  /**
+   * Screenshot of the project, e.g. "images/projects/storemyfiles.webp" (a file in
+   * public/images/projects/, ideally 1600×1000). Leave unset to show the illustrated template.
+   */
+  preview?: string;
 };
 
 const gh = (repo: string) => `https://github.com/gauravkal006/${repo}`;
@@ -32,6 +37,7 @@ export const projects: Project[] = [
     stack: ["React", "Node.js", "Express.js", "PostgreSQL"],
     repo: gh("storemyfiles"),
     demo: "https://storemyfiles.vercel.app",
+    preview: "images/projects/storemyfiles.webp",
     featured: true,
   },
   {
@@ -47,6 +53,7 @@ export const projects: Project[] = [
     ],
     stack: ["Python", "RAG", "OCR", "HTR", "LLM"],
     repo: gh("DocBlendAI"),
+    preview: "images/projects/docblendai.webp",
     featured: true,
   },
   {
@@ -119,6 +126,7 @@ export const projects: Project[] = [
     stack: ["React", "Weather API", "Maps"],
     repo: gh("weather-app"),
     demo: "https://gauravkal006.github.io/weather-app/",
+    preview: "images/projects/weather-app.webp",
   },
   {
     name: "Scroll-Driven Hero Animation",
@@ -140,6 +148,9 @@ export const projects: Project[] = [
     repo: gh("webion_AR"),
   },
 ];
+
+/** URL-safe id from the repository name, used for preview file names and animation ids. */
+export const slugOf = (p: Project) => p.repo.split("/").pop()!.toLowerCase();
 
 export const featuredProjects = projects.filter((p) => p.featured);
 export const otherProjects = projects.filter((p) => !p.featured);

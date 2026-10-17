@@ -1,17 +1,18 @@
 import type { ProjectCategory, ProjectMotif } from "../data/projects";
 
-// Theme-aware tints (defined in index.css) so the art adapts to light and dark mode.
+// Each category gets one print colour; line work stays in ink so covers read as a set.
 const tint: Record<ProjectCategory, string> = {
-  "Full stack": "var(--art-tint-fs)",
-  "AI & ML": "var(--art-tint-ai)",
-  "Web experience": "var(--art-tint-web)",
+  "Full stack": "var(--color-accent)",
+  "AI & ML": "var(--color-olive)",
+  "Web experience": "var(--color-slate)",
 };
 
 type Props = { motif: ProjectMotif; category: ProjectCategory; name: string };
 
 /**
- * Lightweight, illustrative cover art for a project (inline SVG, no image requests).
- * Purely decorative: the card's heading and description carry the meaning.
+ * Illustrated cover for a project (inline SVG, no image requests): a halftone field, a large
+ * mid-century disc in the category colour, and a line drawing of what the project does.
+ * Purely decorative: the heading and description carry the meaning.
  */
 export function ProjectArt({ motif, category, name }: Props) {
   const c = tint[category];
@@ -19,25 +20,29 @@ export function ProjectArt({ motif, category, name }: Props) {
   return (
     <svg viewBox="0 0 400 225" className="h-full w-full" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
       <defs>
-        <radialGradient id={`${id}-glow`} cx="50%" cy="55%" r="65%">
-          <stop offset="0" style={{ stopColor: c }} stopOpacity="0.16" />
-          <stop offset="1" style={{ stopColor: c }} stopOpacity="0" />
-        </radialGradient>
-        <pattern id={`${id}-dots`} width="16" height="16" patternUnits="userSpaceOnUse">
-          <circle cx="1" cy="1" r="1" style={{ fill: "var(--art-dot)" }} />
+        <pattern id={`${id}-dots`} width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+          <circle cx="1.5" cy="1.5" r="1.1" style={{ fill: "var(--color-ink)" }} fillOpacity="0.16" />
         </pattern>
+        <linearGradient id={`${id}-fade`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0.35" stopColor="#fff" stopOpacity="0" />
+          <stop offset="1" stopColor="#fff" stopOpacity="1" />
+        </linearGradient>
+        <mask id={`${id}-mask`}>
+          <rect width="400" height="225" fill={`url(#${id}-fade)`} />
+        </mask>
       </defs>
-      <rect width="400" height="225" style={{ fill: "var(--art-bg)" }} />
-      <rect width="400" height="225" fill={`url(#${id}-dots)`} />
-      <rect width="400" height="225" fill={`url(#${id}-glow)`} />
-      <g fill="none" style={{ stroke: c }} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="400" height="225" style={{ fill: "var(--color-paper-2)" }} />
+      <rect width="400" height="225" fill={`url(#${id}-dots)`} mask={`url(#${id}-mask)`} />
+      <circle cx="318" cy="64" r="92" style={{ fill: c }} fillOpacity="0.2" />
+      <path d="M0 196h400" style={{ stroke: "var(--color-ink)" }} strokeOpacity="0.25" />
+      <g fill="none" style={{ stroke: "var(--color-ink)" }} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         {motifs[motif](c)}
       </g>
     </svg>
   );
 }
 
-const soft = (c: string, o = 0.12) => ({ style: { fill: c, fillOpacity: o } });
+const soft = (c: string, o = 0.12) => ({ style: { fill: c, fillOpacity: Math.min(1, o * 3) } });
 
 const motifs: Record<ProjectMotif, (c: string) => React.ReactNode> = {
   cloud: (c) => (
@@ -121,7 +126,7 @@ const motifs: Record<ProjectMotif, (c: string) => React.ReactNode> = {
       {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => (
         <path key={a} d="M178 52v-10" transform={`rotate(${a} 178 92)`} strokeOpacity="0.6" />
       ))}
-      <path d="M190 150a24 24 0 0 1 44-14 20 20 0 0 1 30 18 16 16 0 0 1-4 32h-66a20 20 0 0 1-4-36z" style={{ fill: "var(--art-bg)" }} strokeWidth="2" />
+      <path d="M190 150a24 24 0 0 1 44-14 20 20 0 0 1 30 18 16 16 0 0 1-4 32h-66a20 20 0 0 1-4-36z" style={{ fill: "var(--color-paper-2)" }} strokeWidth="2" />
       <path d="M104 196h56M240 196h56" strokeOpacity="0.3" />
     </>
   ),

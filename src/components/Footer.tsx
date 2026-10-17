@@ -1,40 +1,51 @@
-import { Mail } from "lucide-react";
 import { navItems, profile } from "../data/profile";
-import { GitHubIcon, LinkedInIcon } from "./BrandIcons";
-import { CodingProfiles } from "./CodingProfiles";
 
+/** Colophon, continuing the inverted back cover from the contact section. */
 export function Footer() {
   return (
-    <footer className="border-t border-line">
-      <div className="container-page flex flex-col gap-8 py-10 md:flex-row md:items-center md:justify-between">
-        <div>
-          <a href="#top" className="font-display text-lg font-semibold tracking-tight">{profile.name}</a>
-          <p className="mt-1 text-sm text-subtle">© {new Date().getFullYear()} · Designed and built in Amravati.</p>
+    <footer className="bg-cover text-cover-ink">
+      <div className="container-page grid gap-8 border-t border-cover-ink/30 py-10 md:grid-cols-12 md:items-start md:gap-6">
+        <div className="md:col-span-5">
+          <a href="#top" className="font-serif text-[1.5rem] italic transition-colors hover:text-accent-inv">
+            {profile.name}
+          </a>
+          <p className="mt-2 text-[0.88rem] text-cover-ink/65">
+            © {new Date().getFullYear()} · Designed and built in Amravati.
+            <br />
+            Set in Fraunces, DM Sans &amp; IBM Plex Mono.
+          </p>
         </div>
-        <nav aria-label="Footer">
-          <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
+        <nav aria-label="Footer" className="md:col-span-4">
+          <ul className="grid grid-cols-2 gap-x-6 text-[0.92rem] text-cover-ink/80">
             {navItems.map((item) => (
               <li key={item.id}>
-                <a href={`#${item.id}`} className="link-underline transition-colors hover:text-ink">{item.label}</a>
+                <a href={`#${item.id}`} className="inline-flex min-h-9 items-center gap-2 transition-colors hover:text-accent-inv">
+                  <span className="font-mono text-[0.8rem] text-cover-ink/50">{item.index}</span>
+                  {item.label}
+                </a>
               </li>
             ))}
           </ul>
         </nav>
-        <div className="flex flex-wrap items-center gap-1">
-          <ul className="flex gap-1" aria-label="Social links">
-            <li>
-              <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)" className="grid size-11 place-items-center rounded-full text-muted transition-colors hover:bg-white/5 hover:text-ink"><GitHubIcon /></a>
-            </li>
-            <li>
-              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)" className="grid size-11 place-items-center rounded-full text-muted transition-colors hover:bg-white/5 hover:text-ink"><LinkedInIcon /></a>
-            </li>
-            <li>
-              <a href={`mailto:${profile.email}`} aria-label="Email" className="grid size-11 place-items-center rounded-full text-muted transition-colors hover:bg-white/5 hover:text-ink"><Mail size={18} aria-hidden="true" /></a>
-            </li>
-          </ul>
-          <span aria-hidden="true" className="mx-1 hidden h-5 w-px bg-line-strong sm:block" />
-          <CodingProfiles compact />
-        </div>
+        <ul className="flex flex-col text-[0.92rem] text-cover-ink/80 md:col-span-3 md:items-end" aria-label="Social links">
+          <li>
+            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-9 items-center transition-colors hover:text-accent-inv">
+              GitHub&nbsp;<span aria-hidden="true">↗</span>
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-9 items-center transition-colors hover:text-accent-inv">
+              LinkedIn&nbsp;<span aria-hidden="true">↗</span>
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${profile.email}`} className="inline-flex min-h-9 items-center transition-colors hover:text-accent-inv">
+              Email&nbsp;<span aria-hidden="true">↗</span>
+            </a>
+          </li>
+        </ul>
       </div>
     </footer>
   );

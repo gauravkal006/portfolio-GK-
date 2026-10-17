@@ -10,28 +10,52 @@ export const profile = {
   githubUser: "gauravkal006",
   linkedin: "https://www.linkedin.com/in/gaurav-k-137336237/",
   resume: "/resume.pdf",
-  // Profile photo for the About section. Put the image in public/ (e.g. public/profile.jpg,
-  // portrait ~800×1000) and set this to "/profile.jpg". While null, a GK monogram is shown.
-  photo: null as string | null,
+  // Profile photo for the hero, framed in the arch (public/profile.webp, 900×1200 portrait).
+  // Set to null to show the geometric sunrise illustration instead.
+  photo: "profile.webp" as string | null,
   resumeFileName: "Gaurav-Kalamkhede-Resume.pdf",
+  statement: "I build full-stack web apps, and AI tools that",
+  statementEm: "read real documents.",
   intro:
-    "Computer Science Engineering student at PRMITR, Amravati. I build full-stack web apps with Java, React, and Node.js, and AI tools that read, reason over, and answer questions from real documents.",
+    "Computer Science Engineering student at PRMITR, Amravati. I work mostly with Java, React and Node.js, and lately on retrieval-augmented systems that answer questions from typed, scanned and handwritten notes.",
 } as const;
 
-// Competitive-programming profiles. SAMPLE LINKS: replace YOUR_USERNAME with your real handles.
-// Set `url` to null to hide a platform.
+// Small cards that float beside the profile card in the hero. Facts only from the resume/projects.
+export type HeroFact = { label: string; value: string; sub: string; glyph: "circle" | "half" | "square" | "triangle" | "arch" | "quarter" };
+export const heroFacts: { left: HeroFact[]; right: HeroFact[] } = {
+  left: [
+    { label: "Studying", value: "B.Tech CSE", sub: "PRMITR · CGPA 8.1", glyph: "arch" },
+    { label: "Interned", value: "Java full-stack", sub: "Compilers Technologies", glyph: "circle" },
+    { label: "Based in", value: "Amravati", sub: "Maharashtra, India", glyph: "half" },
+  ],
+  right: [
+    { label: "Recently built", value: "Validify", sub: "Angular 19 · .NET 9 · Azure", glyph: "square" },
+    { label: "Daily stack", value: "Java · React", sub: "Spring Boot · Node.js", glyph: "triangle" },
+    { label: "Exploring", value: "RAG & OCR", sub: "Answering questions from notes", glyph: "quarter" },
+  ],
+};
+
+// Quote shown above the profile card. A real, attributed quote; replace with your own if you like.
+export const heroQuote = {
+  text: "Simplicity is prerequisite for reliability.",
+  author: "Edsger W. Dijkstra",
+};
+
+// Competitive-programming profiles. Hidden until real handles are added: set `url` to the
+// profile address (e.g. "https://leetcode.com/u/<handle>/") to show a platform.
 export const codingProfiles: { name: string; short: string; color: string; url: string | null }[] = [
-  { name: "LeetCode", short: "LC", color: "#FFA116", url: "https://leetcode.com/u/YOUR_USERNAME/" },
-  { name: "HackerRank", short: "HR", color: "#2EC866", url: "https://www.hackerrank.com/profile/YOUR_USERNAME" },
-  { name: "Codeforces", short: "CF", color: "#1F8ACB", url: "https://codeforces.com/profile/YOUR_USERNAME" },
-  { name: "CodeChef", short: "CC", color: "#B7834F", url: "https://www.codechef.com/users/YOUR_USERNAME" },
+  { name: "LeetCode", short: "LC", color: "#FFA116", url: null },
+  { name: "HackerRank", short: "HR", color: "#2EC866", url: null },
+  { name: "Codeforces", short: "CF", color: "#1F8ACB", url: null },
+  { name: "CodeChef", short: "CC", color: "#B7834F", url: null },
 ];
 
+// `index` matches the section's folio number (Nº) on the page.
 export const navItems = [
-  { id: "about", label: "About" },
-  { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projects" },
-  { id: "experience", label: "Experience" },
-  { id: "resume", label: "Resume" },
-  { id: "contact", label: "Contact" },
+  { id: "about", label: "About", index: "01" },
+  { id: "skills", label: "Skills", index: "02" },
+  { id: "projects", label: "Work", index: "03" },
+  { id: "experience", label: "Journey", index: "05" },
+  { id: "resume", label: "Resume", index: "06" },
+  { id: "contact", label: "Contact", index: "07" },
 ] as const;

@@ -1,75 +1,79 @@
 @import "tailwindcss";
 
+/*
+  Design tokens.
+  Day: a clean white page, near-black ink, burnt orange for interaction; olive, mustard and
+  slate appear only in illustrations and small markers.
+  Galaxy (data-theme="dark"): deep-space navy behind a live starfield, pale starlight text,
+  with the accent warmed up so it glows against the dark.
+  `accent` is for fills and large type; `accent-ink` is the shade for small text (4.5:1+).
+  `cover` / `cover-ink` paint the closing "back cover" (contact + footer).
+*/
 @theme {
-  --color-bg: #0a0b0d;
-  --color-surface: #111318;
-  --color-surface-2: #161920;
-  --color-line: rgb(255 255 255 / 0.08);
-  --color-line-strong: rgb(255 255 255 / 0.14);
-  --color-ink: #eceef1;
-  --color-muted: #9ba3ae;
-  --color-subtle: #6f7781;
-  --color-accent: #5ee0ff;
-  --color-accent-2: #9d8cff;
-  --color-lime: #c8ff5f;
-  --color-on-accent: #041218;
-  --color-accent-hover: #8ae9ff;
-  --color-chip: #c6ccd4;
-  --color-danger: #ff9b9b;
-  --color-field: rgb(0 0 0 / 0.25);
-  --color-grid: rgb(255 255 255 / 0.035);
+  --color-bg: #ffffff;
+  --color-paper: #f7f7f5;
+  --color-paper-2: #efefec;
+  --color-line: #e6e6e2;
+  --color-line-strong: #c9c9c4;
+  --color-ink: #16171a;
+  --color-muted: #5c5e65;
+  --color-accent: #c65d3a;
+  --color-accent-ink: #a84a2b;
+  --color-accent-inv: #f08a62;
+  --color-olive: #737b52;
+  --color-mustard: #d6ac49;
+  --color-slate: #4f6d7a;
+  --color-danger: #a8321f;
+  --color-cover: #121316;
+  --color-cover-ink: #ffffff;
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-/* Light theme. Darker ink and accents keep body text at ~7:1 and accents at 4.5:1+ on the
-   light background. `--color-white` is the overlay tint used by bg-white/* utilities, so it
-   flips to near-black to keep subtle surfaces and hovers visible. */
 :root {
-  color-scheme: dark;
-  /* Project cover art palette (see ProjectArt.tsx). */
-  --art-bg: #0d0f13;
-  --art-dot: rgb(255 255 255 / 0.07);
-  --art-tint-fs: #5ee0ff;
-  --art-tint-ai: #9d8cff;
-  --art-tint-web: #c8ff5f;
-}
-:root[data-theme="light"] {
   color-scheme: light;
-  --color-bg: #f6f7f9;
-  --color-surface: #ffffff;
-  --color-surface-2: #eef1f5;
-  --color-line: rgb(15 23 42 / 0.09);
-  --color-line-strong: rgb(15 23 42 / 0.17);
-  --color-ink: #0e1116;
-  --color-muted: #475162;
-  --color-subtle: #677284;
-  --color-accent: #0073a0;
-  --color-accent-2: #5b3fd9;
-  --color-lime: #4a7a0c;
-  --color-on-accent: #ffffff;
-  --color-accent-hover: #00658c;
-  --color-chip: #344054;
-  --color-danger: #c62828;
-  --color-field: #ffffff;
-  --color-grid: rgb(15 23 42 / 0.05);
-  --color-white: #0f172a;
-  --art-bg: #edf1f6;
-  --art-dot: rgb(15 23 42 / 0.09);
-  --art-tint-fs: #0a7fae;
-  --art-tint-ai: #6247e0;
-  --art-tint-web: #4f7d08;
+  --card-shadow: 0 1px 2px rgb(16 17 20 / 0.05), 0 8px 24px -12px rgb(16 17 20 / 0.12);
+  --card-shadow-hover: 0 2px 4px rgb(16 17 20 / 0.06), 0 24px 48px -20px rgb(16 17 20 / 0.28);
+}
+
+/* Galaxy edition. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #060814;
+  --color-paper: #0d1226;
+  --color-paper-2: #141a33;
+  --color-line: #20274a;
+  --color-line-strong: #3a4373;
+  --color-ink: #eceefa;
+  --color-muted: #a3a9cc;
+  --color-accent: #ff8a65;
+  --color-accent-ink: #ffa184;
+  --color-accent-inv: #ffa184;
+  --color-olive: #7fd1bd;
+  --color-mustard: #f6c86b;
+  --color-slate: #8ea8ff;
+  --color-danger: #ff9a86;
+  --color-cover: rgb(10 14 34 / 0.72);
+  --color-cover-ink: #eceefa;
+  --card-shadow: 0 0 0 1px rgb(142 168 255 / 0.10), 0 12px 32px -16px rgb(0 0 0 / 0.8);
+  --card-shadow-hover: 0 0 0 1px rgb(142 168 255 / 0.28), 0 24px 60px -20px rgb(110 120 255 / 0.35);
 }
 
 @layer base {
+  /* Generous base size: 17px on phones, 18px from tablets up. Everything in rem scales with it. */
   html {
+    font-size: 106.25%;
     scroll-behavior: smooth;
-    scroll-padding-top: 5.5rem;
+    scroll-padding-top: 5rem;
     -webkit-text-size-adjust: 100%;
+  }
+  @media (min-width: 768px) {
+    html { font-size: 112.5%; }
   }
   body {
     min-width: 320px;
@@ -77,29 +81,29 @@
     background: var(--color-bg);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    font-size: 1rem;
     line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-optical-sizing: auto;
   }
-  /* Dark text on a light background reads better with the platform's default smoothing. */
-  :root[data-theme="light"] body {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
+  /* Fallback theme change for browsers without view transitions: a short cross-fade of colours. */
+  html.theme-fading body,
+  html.theme-fading body * {
+    transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease, fill 0.6s ease !important;
   }
-  :root[data-theme="light"] h1,
-  :root[data-theme="light"] h2 { letter-spacing: -0.03em; }
-  ::selection { background: color-mix(in oklab, var(--color-accent) 28%, transparent); color: var(--color-ink); }
-  /* Single-column grids shrink to the container instead of growing to their widest child.
-     grid-cols-* utilities live in a later layer and still win. */
+  ::selection { background: color-mix(in oklab, var(--color-mustard) 55%, transparent); color: var(--color-ink); }
   .grid { grid-template-columns: minmax(0, 1fr); }
-  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; }
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "SOFT" 30;
+    text-wrap: balance;
+  }
+  em { font-style: italic; }
   p { text-wrap: pretty; }
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
-    border-radius: 6px;
+    border-radius: 2px;
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -113,98 +117,72 @@
 
 @layer components {
   .container-page {
-    width: min(1180px, 100% - 2rem);
+    width: min(1240px, 100% - 2rem);
     margin-inline: auto;
   }
   @media (min-width: 640px) {
-    .container-page { width: min(1180px, 100% - 3.5rem); }
+    .container-page { width: min(1240px, 100% - 4rem); }
   }
 
-  .kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    color: var(--color-accent);
-    font: 500 0.75rem/1.4 var(--font-mono);
-    letter-spacing: 0.06em;
+  /* Compact monospace metadata: dates, indexes, section labels. */
+  .label {
+    font: 500 0.8rem/1.45 var(--font-mono);
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-  }
-  .kicker::before {
-    width: 1.5rem;
-    height: 1px;
-    background: currentColor;
-    content: "";
+    color: var(--color-muted);
   }
 
-  .panel {
-    position: relative;
-    border: 1px solid var(--color-line);
-    border-radius: 1rem;
-    background: linear-gradient(180deg, color-mix(in oklab, var(--color-white) 3%, transparent), color-mix(in oklab, var(--color-white) 1%, transparent)), var(--color-surface);
+  /* Display serif with optical sizing pushed to the large end. */
+  .display {
+    font-family: var(--font-serif);
+    font-weight: 380;
+    font-variation-settings: "SOFT" 40, "opsz" 144;
+    letter-spacing: -0.025em;
   }
-
-  /* Pointer-following highlight. --mx / --my are set from JS without re-rendering. */
-  .spotlight { isolation: isolate; }
-  .spotlight::before {
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), color-mix(in oklab, var(--color-accent) 8%, transparent), transparent 45%);
-    content: "";
-    opacity: 0;
-    transition: opacity 0.35s ease;
-    pointer-events: none;
-  }
-  .spotlight:hover::before { opacity: 1; }
 
   .btn {
-    position: relative;
     display: inline-flex;
-    min-height: 2.875rem;
+    min-height: 3rem;
     align-items: center;
     justify-content: center;
-    gap: 0.55rem;
-    padding: 0.7rem 1.2rem;
-    border-radius: 999px;
-    font-size: 0.925rem;
-    font-weight: 600;
+    gap: 0.65rem;
+    padding: 0.75rem 1.35rem;
+    border-radius: 2px;
+    font-size: 1rem;
+    font-weight: 500;
     white-space: nowrap;
-    transition: transform 0.25s var(--ease-out-expo), background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.25s var(--ease-out-expo);
     cursor: pointer;
   }
-  .btn:active { transform: scale(0.97); }
-  .btn svg { transition: transform 0.3s var(--ease-out-expo); }
-  .btn-primary {
-    background: var(--color-accent);
-    color: var(--color-on-accent);
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-accent) 40%, transparent), 0 8px 24px -8px color-mix(in oklab, var(--color-accent) 50%, transparent);
-  }
-  .btn-primary:hover { background: var(--color-accent-hover); box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-accent) 60%, transparent), 0 12px 32px -8px color-mix(in oklab, var(--color-accent) 60%, transparent); }
-  .btn-ghost {
-    border: 1px solid var(--color-line-strong);
-    background: color-mix(in oklab, var(--color-white) 3%, transparent);
-    color: var(--color-ink);
-  }
-  .btn-ghost:hover { border-color: color-mix(in oklab, var(--color-accent) 50%, transparent); background: color-mix(in oklab, var(--color-accent) 6%, transparent); }
-  .btn:hover .arrow-ur { transform: translate(2px, -2px); }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--color-ink); color: var(--color-bg); }
+  .btn-primary:hover { background: var(--color-accent-ink); color: #fff8ef; }
+  .btn-outline { border: 1px solid var(--color-ink); color: var(--color-ink); }
+  .btn-outline:hover { background: var(--color-ink); color: var(--color-bg); }
+  .btn svg { transition: transform 0.35s var(--ease-out-expo); }
+  .btn:hover .arrow-r { transform: translateX(3px); }
+  .btn:hover .arrow-ur, .link-arrow:hover .arrow-ur { transform: translate(2px, -2px); }
   .btn:hover .arrow-d { transform: translateY(2px); }
 
-  .chip {
+  /* Text link with a ruled underline that shifts to the accent on hover. */
+  .link-arrow {
     display: inline-flex;
     align-items: center;
-    padding: 0.3rem 0.65rem;
-    border: 1px solid var(--color-line);
-    border-radius: 999px;
-    background: color-mix(in oklab, var(--color-white) 2.5%, transparent);
-    color: var(--color-chip);
-    font: 0.75rem/1.4 var(--font-mono);
-    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    color: var(--color-ink);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-strong);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    transition: color 0.25s ease, text-decoration-color 0.25s ease;
   }
+  .link-arrow:hover { color: var(--color-accent-ink); text-decoration-color: currentColor; }
+  .link-arrow svg { transition: transform 0.35s var(--ease-out-expo); }
+  .link-arrow:hover .arrow-r { transform: translateX(3px); }
 
-  .link-underline {
-    position: relative;
-  }
+  .link-underline { position: relative; }
   .link-underline::after {
     position: absolute;
     right: 0;
@@ -215,72 +193,719 @@
     content: "";
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 0.35s var(--ease-out-expo);
+    transition: transform 0.4s var(--ease-out-expo);
   }
   .link-underline:hover::after,
   .link-underline:focus-visible::after { transform: scaleX(1); transform-origin: left; }
 
+  /* Slash-separated technology list. */
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0;
+    font: 0.88rem/1.6 var(--font-mono);
+    color: var(--color-muted);
+  }
+  .stack-list > li:not(:last-child)::after {
+    margin-inline: 0.5rem;
+    color: var(--color-line-strong);
+    content: "/";
+  }
+
+  /* Editorial drop cap for opening paragraphs. */
+  .dropcap::first-letter {
+    float: left;
+    margin: 0.08em 0.12em 0 0;
+    color: var(--color-accent);
+    font-family: var(--font-serif);
+    font-size: 3.6em;
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+    line-height: 0.8;
+  }
+
+  /* Letter-style form fields: a single ruled line. */
   .field {
     width: 100%;
-    min-height: 2.875rem;
-    padding: 0.7rem 0.9rem;
-    border: 1px solid var(--color-line-strong);
-    border-radius: 0.75rem;
-    background: var(--color-field);
-    color: var(--color-ink);
-    font-size: 0.95rem;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    min-height: 2.75rem;
+    padding: 0.55rem 0;
+    border: 0;
+    border-bottom: 1px solid currentColor;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
   }
-  .field::placeholder { color: var(--color-subtle); }
-  .field:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 15%, transparent); }
-  .field[aria-invalid="true"] { border-color: var(--color-danger); }
+  .field:focus { outline: none; border-bottom-color: var(--color-accent-inv); box-shadow: 0 1px 0 0 var(--color-accent-inv); }
+  .field[aria-invalid="true"] { border-bottom-color: var(--color-accent-inv); }
 }
 
-/* Ambient background: pre-blurred radial gradients, animated with transform only. */
-.bg-orb {
+/* ---------- Theme change: the new theme spreads out as a circle (see lib/theme.ts). ---------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+/* ---------- Galaxy backdrop ---------- */
+.galaxy { opacity: 0; transition: opacity 0.9s ease; }
+:root[data-theme="dark"] .galaxy { opacity: 1; }
+.galaxy__nebula {
   position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(38% 32% at 14% 18%, rgb(124 92 255 / 0.22), transparent 70%),
+    radial-gradient(34% 28% at 86% 26%, rgb(255 112 168 / 0.13), transparent 70%),
+    radial-gradient(44% 38% at 62% 88%, rgb(48 184 208 / 0.13), transparent 70%),
+    radial-gradient(28% 24% at 28% 68%, rgb(255 164 96 / 0.07), transparent 70%);
+}
+
+/* ---------- Day / galaxy switch: skeuomorphic track and knob ----------
+   Shading follows the classic skeuomorphism toggle: a deep recessed track with layered inset
+   shadows and grain, and a raised knob with a highlight on top, shade underneath and a
+   two-layer drop shadow. */
+:root {
+  --noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='5' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
+  --skeu-track: #dedad3;
+  --skeu-knob: #e9e6e0;
+  --skeu-engrave: rgb(0 0 0 / 0.38);
+  --skeu-track-shadow:
+    inset 0 0 2.3rem 2.3rem rgb(0 0 0 / 0.08),
+    inset 0 0.26rem 0.14rem rgb(0 0 0 / 0.2),
+    inset 0 1rem 0.33rem rgb(0 0 0 / 0.08),
+    0 -0.08rem 0.08rem rgb(0 0 0 / 0.14),
+    0 0.08rem 0.08rem rgb(255 255 255 / 0.5);
+  --skeu-knob-shadow:
+    inset 0 0.08rem 0.08rem rgb(255 255 255 / 0.6),
+    inset 0 -0.08rem 0.08rem rgb(0 0 0 / 0.15),
+    0 0.2rem 0.14rem rgb(0 0 0 / 0.22),
+    0 0.42rem 0.33rem rgb(0 0 0 / 0.2);
+}
+:root[data-theme="dark"] {
+  --skeu-track: #1d2532;
+  --skeu-knob: #242e3e;
+  --skeu-engrave: rgb(255 255 255 / 0.5);
+  --skeu-track-shadow:
+    inset 0 0 2.3rem 2.3rem rgb(0 0 0 / 0.3),
+    inset 0 0.26rem 0.14rem rgb(0 0 0 / 0.3),
+    inset 0 1rem 0.33rem rgb(0 0 0 / 0.25),
+    0 -0.08rem 0.08rem rgb(0 0 0 / 0.2),
+    0 0.08rem 0.08rem rgb(255 255 255 / 0.08);
+  --skeu-knob-shadow:
+    inset 0 0.08rem 0.08rem rgb(255 255 255 / 0.08),
+    inset 0 -0.08rem 0.08rem rgb(0 0 0 / 0.2),
+    0 0.2rem 0.14rem rgb(0 0 0 / 0.5),
+    0 0.42rem 0.33rem rgb(0 0 0 / 0.5);
+}
+
+.skeu-switch {
+  position: relative;
+  width: 4.4rem;
+  height: 2.3rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.skeu-switch:focus-visible { outline-offset: 4px; border-radius: 999px; }
+.skeu-switch__track {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background-color: var(--skeu-track);
+  box-shadow: var(--skeu-track-shadow);
+  transition: background-color 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+.skeu-switch__track::before {
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise);
+  content: "";
+  opacity: 0.6;
+}
+.skeu-switch__knob {
+  position: absolute;
+  top: 0.1rem;
+  left: 0.1rem;
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  place-items: center;
+  overflow: hidden;
   border-radius: 50%;
-  will-change: transform;
+  background-color: var(--skeu-knob);
+  box-shadow: var(--skeu-knob-shadow);
+  transition: transform 0.38s cubic-bezier(0.3, 1.35, 0.5, 1), background-color 0.3s ease-out, box-shadow 0.3s ease-out;
 }
-@keyframes drift-a {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(-6%, 8%, 0) scale(1.08); }
+.skeu-switch__knob::after {
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise);
+  content: "";
+  opacity: 0.45;
 }
-@keyframes drift-b {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(8%, -6%, 0) scale(0.94); }
+.skeu-switch[data-on] .skeu-switch__knob { transform: translateX(2.1rem); }
+.skeu-switch:active .skeu-switch__knob { transform: scale(0.93); }
+.skeu-switch[data-on]:active .skeu-switch__knob { transform: translateX(2.1rem) scale(0.93); }
+.skeu-switch:hover .skeu-switch__knob { filter: brightness(1.04); }
+
+/* Engraved icon: dark stroke with a light lip underneath, like a stamped metal knob. */
+.skeu-switch__icon {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: var(--skeu-engrave);
+  stroke-linecap: round;
+  stroke-width: 2;
+  filter: drop-shadow(0 1px 0 rgb(255 255 255 / 0.55));
+  transition: opacity 0.3s ease, transform 0.45s var(--ease-out-expo);
 }
-.bg-grid {
-  background-image:
-    linear-gradient(var(--color-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+:root[data-theme="dark"] .skeu-switch__icon { filter: drop-shadow(0 -1px 0 rgb(0 0 0 / 0.6)); }
+.skeu-switch__icon--moon { fill: var(--skeu-engrave); stroke: none; opacity: 0; transform: rotate(-60deg) scale(0.6); }
+.skeu-switch[data-on] .skeu-switch__icon--sun { opacity: 0; transform: rotate(90deg) scale(0.6); }
+.skeu-switch[data-on] .skeu-switch__icon--moon { opacity: 1; transform: none; }
+
+/* ---------- Shared skeuomorphic surfaces: recessed trays and raised knobs ---------- */
+.skeu-tray {
+  position: relative;
+  background-color: var(--skeu-track);
+  box-shadow: var(--skeu-track-shadow);
+}
+.skeu-tray::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: var(--noise);
+  content: "";
+  opacity: 0.5;
+  pointer-events: none;
+}
+.skeu-knob {
+  background-color: var(--skeu-knob);
+  background-image: var(--noise);
+  box-shadow: var(--skeu-knob-shadow);
 }
 
-@keyframes caret { 50% { opacity: 0; } }
-.caret { animation: caret 1s steps(2, end) infinite; }
-
-@keyframes scroll-dot {
-  0% { transform: translateY(0); opacity: 0; }
-  30% { opacity: 1; }
-  100% { transform: translateY(12px); opacity: 0; }
+/* ---------- Project cards ---------- */
+.project-card {
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
 }
-.scroll-dot { animation: scroll-dot 1.8s ease-in-out infinite; }
+.project-card:hover { box-shadow: var(--card-shadow-hover); border-color: var(--color-line-strong); }
+.project-card:has(button:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.project-card button:focus-visible { outline: none; }
 
-@keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(2.4); opacity: 0; }
+/* ---------- Pushable 3D buttons (hero) ----------
+   Three layers: a soft shadow on the "table", a darker edge, and the face that sits raised
+   above it. Hover lifts the face; pressing pushes it down onto the edge. */
+.push {
+  position: relative;
+  display: inline-block;
+  border-radius: 12px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
-.pulse-ring { animation: pulse-ring 2s ease-out infinite; }
+.push:focus-visible { outline-offset: 6px; border-radius: 12px; }
+.push__shadow,
+.push__edge {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+}
+.push__shadow {
+  background: rgb(16 17 20 / 0.24);
+  filter: blur(4px);
+  transform: translateY(3px);
+  transition: transform 0.6s cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+.push__edge { background: var(--push-edge); }
+.push__front {
+  position: relative;
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.4rem;
+  border: 1px solid var(--push-border, transparent);
+  border-radius: 12px;
+  background: var(--push-face);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35);
+  color: var(--push-ink);
+  font-size: 1.05rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translateY(-5px);
+  transition: transform 0.6s cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+.push__front svg { transition: transform 0.35s var(--ease-out-expo); }
+.push:hover .push__front { transform: translateY(-7px); transition: transform 0.25s cubic-bezier(0.3, 0.7, 0.4, 1.5); }
+.push:hover .push__shadow { transform: translateY(5px); transition: transform 0.25s cubic-bezier(0.3, 0.7, 0.4, 1.5); }
+.push:hover .arrow-r { transform: translateX(3px); }
+.push:hover .arrow-d { transform: translateY(2px); }
+.push:active .push__front { transform: translateY(-1px); transition-duration: 34ms; }
+.push:active .push__shadow { transform: translateY(1px); transition-duration: 34ms; }
+.push--primary {
+  --push-face: linear-gradient(180deg, #c25a37, #a84a2b);
+  --push-edge: linear-gradient(to left, #5a2412 0%, #7f3219 8%, #7f3219 92%, #5a2412 100%);
+  --push-ink: #ffffff;
+}
+.push--key {
+  --push-face: linear-gradient(180deg, #ffffff, #f2f2ef);
+  --push-edge: linear-gradient(to left, #a3a39e 0%, #c6c6c1 8%, #c6c6c1 92%, #a3a39e 100%);
+  --push-border: #dadad6;
+  --push-ink: var(--color-ink);
+}
+:root[data-theme="dark"] .push--key {
+  --push-face: linear-gradient(180deg, #1d2550, #131a3a);
+  --push-edge: linear-gradient(to left, #04061a 0%, #0a0f2c 8%, #0a0f2c 92%, #04061a 100%);
+  --push-border: #2e3770;
+}
+:root[data-theme="dark"] .push__shadow { background: rgb(0 0 0 / 0.6); }
+:root[data-theme="dark"] .push--primary .push__shadow { background: rgb(255 120 80 / 0.45); filter: blur(10px); }
+
+/* Slow rotation for the sunburst rays. One small element, transform only. */
+@keyframes sun-spin { to { transform: rotate(360deg); } }
+.sun-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sun-spin 140s linear infinite;
+}
 
 @keyframes shimmer { 100% { transform: translateX(100%); } }
-.skeleton { position: relative; overflow: hidden; background: color-mix(in oklab, var(--color-white) 5%, transparent); }
+.skeleton { position: relative; overflow: hidden; background: var(--color-paper-2); }
 .skeleton::after {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-white) 6%, transparent), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-paper) 70%, transparent), transparent);
   content: "";
   transform: translateX(-100%);
   animation: shimmer 1.4s infinite;
+}
+
+/* ---------- Holographic profile card (see HoloCard.tsx; adapted from @simeydotme, MIT) ----------
+   A quiet version that fits the editorial page: a solid card face (paper by day, night navy in the
+   galaxy theme) inside a thin iridescent rim. The holographic effect is a pastel sheen and a glare
+   that follow the pointer, so the photo and text always stay clear. */
+.holo {
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+  --pointer-from-center: 0;
+  --pointer-from-top: 0.5;
+  --pointer-from-left: 0.5;
+  --card-opacity: 0;
+  --rotate-x: 0deg;
+  --rotate-y: 0deg;
+  --background-x: 50%;
+  --background-y: 50%;
+  --holo-radius: 20px;
+  --holo-rim: 5px;
+  --holo-face: #ffffff;
+  --holo-sheen-blend: multiply;
+  --holo-sheen-strength: 0.22;
+  --holo-glow: 0.18;
+
+  position: relative;
+  width: 100%;
+  perspective: 700px;
+  touch-action: pan-y;
+  transform: translate3d(0, 0, 0.1px);
+}
+:root[data-theme="dark"] .holo {
+  --holo-face: #0c1126;
+  --holo-sheen-blend: screen;
+  --holo-sheen-strength: 0.28;
+  --holo-glow: 0.45;
+}
+
+/* Soft iridescent glow behind the card. */
+.holo::before {
+  position: absolute;
+  inset: -6px;
+  border-radius: var(--holo-radius);
+  background: conic-gradient(from 140deg at 50% 50%, #ffb3c7, #ffe3a3, #b8f5d4, #a7d8ff, #cdb6ff, #ffb3c7);
+  content: "";
+  filter: blur(34px) saturate(1.2);
+  opacity: var(--holo-glow);
+  transform: scale(0.86) translate3d(0, 4%, 0.1px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.holo:hover::before,
+.holo.is-active::before {
+  opacity: calc(var(--holo-glow) * 1.8);
+  transform: scale(0.94) translate3d(0, 3%, 0.1px);
+}
+.holo:hover,
+.holo.is-active { --card-opacity: 1; }
+
+/* The rim: a pearlescent gradient that slides as the light moves. */
+.holo__card {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 0.72;
+  border-radius: var(--holo-radius);
+  background-image: linear-gradient(125deg, #f2c7d6 0%, #f7e2b4 18%, #c9eedb 36%, #bcdcf7 54%, #d6c8f6 72%, #f2c7d6 90%);
+  background-position: var(--background-x) var(--background-y);
+  background-size: 260% 260%;
+  box-shadow:
+    0 1px 2px rgb(16 17 20 / 0.08),
+    rgb(16 17 20 / 0.22) calc(var(--pointer-from-left) * 10px - 5px) calc(var(--pointer-from-top) * 18px + 6px) 36px -10px;
+  transform: translate3d(0, 0, 0.1px) rotateX(0deg) rotateY(0deg);
+  transition: transform 1s ease;
+}
+:root[data-theme="dark"] .holo__card {
+  background-image: linear-gradient(125deg, #8f6bff 0%, #4fb7ff 22%, #5fe0c0 40%, #ffd37a 58%, #ff8fb3 76%, #8f6bff 94%);
+  box-shadow: 0 0 0 1px rgb(142 168 255 / 0.15), rgb(0 0 0 / 0.6) calc(var(--pointer-from-left) * 10px - 5px) calc(var(--pointer-from-top) * 18px + 6px) 40px -10px;
+}
+.holo:hover .holo__card,
+.holo.is-active .holo__card {
+  transform: translate3d(0, 0, 0.1px) rotateX(var(--rotate-y)) rotateY(var(--rotate-x));
+  transition: none;
+}
+
+/* Card face. */
+.holo__inside {
+  position: absolute;
+  inset: var(--holo-rim);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  overflow: hidden;
+  border-radius: calc(var(--holo-radius) - var(--holo-rim));
+  background: var(--holo-face);
+}
+
+/* Pastel holographic band that sweeps with the pointer, over the whole face. */
+.holo__sheen {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  background-image:
+    linear-gradient(115deg, transparent 30%, #ff9ec4 40%, #ffe08a 46%, #8ff0c8 52%, #8cc8ff 58%, #c3a6ff 64%, transparent 74%);
+  background-position: var(--background-x) var(--background-y);
+  background-size: 300% 300%;
+  mix-blend-mode: var(--holo-sheen-blend);
+  opacity: calc(var(--holo-sheen-strength) * var(--card-opacity));
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+/* Highlight where the light hits. */
+.holo__glare {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  background-image: radial-gradient(farthest-corner circle at var(--pointer-x) var(--pointer-y), rgb(255 255 255 / 0.55) 0%, rgb(255 255 255 / 0.12) 28%, transparent 60%);
+  mix-blend-mode: soft-light;
+  opacity: var(--card-opacity);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+/* Content drifts a few pixels against the tilt for depth. */
+.holo__content {
+  position: relative;
+  z-index: 5;
+  transform: translate3d(calc(var(--pointer-from-left) * -5px + 2.5px), calc(var(--pointer-from-top) * -5px + 2.5px), 0.1px);
+  pointer-events: none;
+}
+.holo__photo {
+  margin: 6% 6% 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--color-paper-2);
+  box-shadow: 0 0 0 1px var(--color-line), rgb(16 17 20 / 0.18) calc(var(--pointer-from-left) * 6px - 3px) calc(var(--pointer-from-top) * 10px - 2px) 18px -6px;
+}
+.holo__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 28%;
+}
+.holo__monogram {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  color: var(--color-accent);
+  font-family: var(--font-serif);
+  font-size: 5rem;
+  font-style: italic;
+}
+.holo__details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.25rem 0.75rem;
+  padding: 0.9rem 6% 1.1rem;
+}
+.holo__name {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 2vw, 1.65rem);
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+.holo__meta {
+  margin: 0;
+  color: var(--color-muted);
+  font: 0.8rem/1.4 var(--font-mono);
+  letter-spacing: 0.04em;
+}
+.holo__role {
+  margin: 0;
+  padding: 0.25em 0.75em;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 999px;
+  color: var(--color-accent-ink);
+  font: 500 0.72rem/1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- Navigation: a recessed tray of physical keys ---------- */
+.nav-dock {
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ececea, #f6f6f4);
+  box-shadow: inset 0 2px 4px rgb(16 17 20 / 0.12), inset 0 -1px 0 rgb(255 255 255 / 0.8), 0 1px 0 rgb(255 255 255 / 0.9);
+}
+:root[data-theme="dark"] .nav-dock {
+  background: linear-gradient(180deg, #070a1a, #0d1228);
+  box-shadow: inset 0 2px 5px rgb(0 0 0 / 0.6), 0 0 0 1px rgb(142 168 255 / 0.08);
+}
+.nav-link {
+  position: relative;
+  display: flex;
+  min-height: 2.6rem;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  transition: color 0.2s ease, transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-link:focus-visible { outline-offset: 2px; }
+.nav-key {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #d9d9d5;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffffff, #f1f1ee);
+  box-shadow: 0 2px 0 #c4c4bf, 0 5px 12px -5px rgb(16 17 20 / 0.3), inset 0 1px 0 #ffffff;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+:root[data-theme="dark"] .nav-key {
+  border-color: #313a75;
+  background: linear-gradient(180deg, #212a5a, #151c40);
+  box-shadow: 0 2px 0 #04061a, 0 6px 16px -6px rgb(110 120 255 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+/* Pressing pushes the key down onto its edge. */
+.nav-link:active { transform: translateY(1px); }
+.nav-link:active .nav-key {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 #c4c4bf, 0 2px 4px -2px rgb(16 17 20 / 0.25), inset 0 1px 2px rgb(16 17 20 / 0.08);
+}
+:root[data-theme="dark"] .nav-link:active .nav-key { box-shadow: 0 1px 0 #04061a, inset 0 1px 3px rgb(0 0 0 / 0.4); }
+
+/* Indicator light: off by default, glows for the section you are reading. */
+.nav-led {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-line-strong);
+  box-shadow: inset 0 1px 1px rgb(0 0 0 / 0.25);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.nav-led.is-on {
+  background: var(--color-accent);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-accent) 22%, transparent), 0 0 8px var(--color-accent);
+}
+
+/* Monogram coin: raised, presses in on click. */
+.nav-coin {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid #d9d9d5;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #ececea 70%);
+  box-shadow: 0 2px 0 #c4c4bf, 0 5px 12px -5px rgb(16 17 20 / 0.35), inset 0 1px 0 #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1;
+  transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s ease, color 0.2s ease, background 0.3s ease;
+}
+.group:hover .nav-coin { color: #ffffff; background: radial-gradient(circle at 35% 30%, #d8714d, #a84a2b 75%); border-color: #8f3d22; box-shadow: 0 2px 0 #6e2c16, 0 6px 14px -5px rgb(198 93 58 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.3); transform: translateY(-1px) rotate(-8deg); }
+.group:active .nav-coin { transform: translateY(1px); box-shadow: 0 0 0 #6e2c16, inset 0 1px 3px rgb(0 0 0 / 0.3); }
+:root[data-theme="dark"] .nav-coin {
+  border-color: #313a75;
+  background: radial-gradient(circle at 35% 30%, #2a3470, #141a3d 70%);
+  box-shadow: 0 2px 0 #04061a, 0 6px 16px -6px rgb(110 120 255 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.1);
+}
+
+/* Compact size of the pushable key, for the header. */
+.push--sm .push__front {
+  min-height: 2.6rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  transform: translateY(-4px);
+}
+.push--sm,
+.push--sm .push__shadow,
+.push--sm .push__edge { border-radius: 10px; }
+.push--sm:hover .push__front { transform: translateY(-5px); }
+.push--sm:active .push__front { transform: translateY(-1px); }
+button.push { padding: 0; border: 0; background: transparent; cursor: pointer; }
+
+/* Nav hover details: rolling label, warming index and indicator light. */
+.nav-roll {
+  display: inline-block;
+  height: 1.35em;
+  overflow: hidden;
+  line-height: 1.35em;
+}
+.nav-roll > span {
+  display: block;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.nav-roll > span::after {
+  display: block;
+  color: var(--color-accent-ink);
+  content: attr(data-text);
+}
+.nav-link:hover .nav-roll > span,
+.nav-link:focus-visible .nav-roll > span { transform: translateY(-50%); }
+.nav-index { color: var(--color-muted); transition: color 0.25s ease; }
+.nav-link:hover .nav-index { color: var(--color-accent-ink); }
+.nav-link:hover .nav-led:not(.is-on) {
+  background: var(--color-mustard);
+  box-shadow: 0 0 6px color-mix(in oklab, var(--color-mustard) 70%, transparent);
+}
+
+/* ---------- Hero fact cards: small floating cards beside the profile card ---------- */
+@keyframes fact-bob {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -7px, 0); }
+}
+.fact-float { animation: fact-bob 6s ease-in-out infinite; will-change: transform; }
+.fact-face {
+  padding: 0.85rem 1rem 0.9rem;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--color-bg) 88%, transparent);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(6px);
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.fact-face:hover { border-color: var(--color-line-strong); box-shadow: var(--card-shadow-hover); }
+:root[data-theme="dark"] .fact-face { background: color-mix(in oklab, var(--color-paper) 82%, transparent); }
+
+/* ---------- Skeuomorphic finish for keys, trays and the back-to-top knob ----------
+   Same light model as the theme switch: grainy surfaces lit from above, a bright top lip, a
+   shaded underside, two-layer drop shadows, and a sunken inset when pressed. */
+.push__front {
+  background: var(--noise), var(--push-face);
+  box-shadow:
+    inset 0 0.1rem 0.1rem rgb(255 255 255 / 0.55),
+    inset 0 -0.14rem 0.14rem rgb(0 0 0 / 0.14);
+}
+.push__shadow {
+  background: transparent;
+  filter: none;
+  box-shadow: 0 0.6rem 0.4rem rgb(0 0 0 / 0.16), 0 1.25rem 1rem rgb(0 0 0 / 0.14);
+}
+.push--key {
+  --push-face: linear-gradient(180deg, #f1eee8, #e2ded6);
+  --push-edge: linear-gradient(to left, #b3ada2 0%, #c9c4ba 8%, #c9c4ba 92%, #b3ada2 100%);
+  --push-border: transparent;
+}
+.push--primary {
+  --push-face: linear-gradient(180deg, #c45c39, #a84a2b);
+}
+.push--primary .push__front {
+  box-shadow:
+    inset 0 0.1rem 0.1rem rgb(255 255 255 / 0.35),
+    inset 0 -0.14rem 0.14rem rgb(0 0 0 / 0.22);
+}
+:root[data-theme="dark"] .push--key {
+  --push-face: linear-gradient(180deg, #283244, #1e2634);
+  --push-edge: linear-gradient(to left, #0b0f17 0%, #121822 8%, #121822 92%, #0b0f17 100%);
+}
+:root[data-theme="dark"] .push--key .push__front {
+  box-shadow:
+    inset 0 0.1rem 0.1rem rgb(255 255 255 / 0.08),
+    inset 0 -0.14rem 0.14rem rgb(0 0 0 / 0.3);
+}
+:root[data-theme="dark"] .push__shadow { background: transparent; box-shadow: 0 0.6rem 0.4rem rgb(0 0 0 / 0.5), 0 1.25rem 1rem rgb(0 0 0 / 0.45); }
+:root[data-theme="dark"] .push--primary .push__shadow { box-shadow: 0 0.6rem 0.4rem rgb(0 0 0 / 0.5), 0 1rem 1.6rem rgb(255 120 80 / 0.3); }
+
+/* Trays (nav, project filter) become recessed tracks; the sliding key becomes a raised knob. */
+.nav-dock {
+  position: relative;
+  border: 0;
+  background: var(--skeu-track);
+  box-shadow: var(--skeu-track-shadow);
+}
+.nav-dock::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: var(--noise);
+  content: "";
+  opacity: 0.5;
+  pointer-events: none;
+}
+:root[data-theme="dark"] .nav-dock { background: var(--skeu-track); box-shadow: var(--skeu-track-shadow); }
+.nav-key,
+:root[data-theme="dark"] .nav-key {
+  border: 0;
+  background: var(--noise), var(--skeu-knob);
+  box-shadow: var(--skeu-knob-shadow);
+}
+.nav-link:active .nav-key,
+:root[data-theme="dark"] .nav-link:active .nav-key {
+  box-shadow:
+    inset 0 0.12rem 0.25rem rgb(0 0 0 / 0.22),
+    inset 0 -0.06rem 0.06rem rgb(255 255 255 / 0.2);
+}
+.nav-link { position: relative; z-index: 1; }
+
+.nav-coin,
+:root[data-theme="dark"] .nav-coin {
+  border: 0;
+  background: var(--noise), var(--skeu-knob);
+  box-shadow: var(--skeu-knob-shadow);
+}
+
+/* Round knob button (back to top). */
+.skeu-round {
+  border: 0;
+  background: var(--noise), var(--skeu-knob);
+  box-shadow: var(--skeu-knob-shadow);
+  color: var(--color-ink);
+  transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s ease, opacity 0.3s ease;
+}
+.skeu-round:hover { transform: translateY(-2px); }
+.skeu-round:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 0.12rem 0.25rem rgb(0 0 0 / 0.25), inset 0 -0.06rem 0.06rem rgb(255 255 255 / 0.2);
 }

@@ -24,10 +24,19 @@ npm run preview    # serve the production build
 | Skills | `src/data/skills.ts` |
 | Experience, education, certifications | `src/data/experience.ts` |
 | Resume PDF | `public/resume.pdf` |
+| Project screenshots | `public/images/projects/` (see below) |
 | Sections and UI | `src/components/` |
 | Design tokens | `src/index.css` (`@theme`) |
 
 To replace the resume, overwrite `public/resume.pdf`.
+
+### Adding a project screenshot
+
+Every project card has a browser-window preview slot. Until a screenshot is added it shows an
+illustrated template (and, in `npm run dev` only, a hint with the expected file name).
+
+1. Save a screenshot (about 1600×1000, `.webp` or `.jpg`) to `public/images/projects/`, e.g. `storemyfiles.webp`.
+2. In `src/data/projects.ts`, add `preview: "images/projects/storemyfiles.webp"` to that project.
 
 ## Deploy
 

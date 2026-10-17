@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Download, Menu, X } from "lucide-react";
+import { motion } from "motion/react";
+import { ArrowUpRight, Download } from "lucide-react";
 import { navItems, profile } from "../data/profile";
 import { useActiveSection } from "../hooks/useActiveSection";
-import { GitHubIcon, LinkedInIcon } from "./BrandIcons";
+import { useMagnetic } from "../hooks/useMagnetic";
+import { PushButton } from "./PushButton";
 import { ThemeToggle } from "./ThemeToggle";
 
 const sectionIds = navItems.map((item) => item.id);
@@ -11,6 +13,11 @@ export function Navbar() {
   const active = useActiveSection(sectionIds);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const logoRef = useRef<HTMLAnchorElement>(null);
+  const resumeRef = useRef<HTMLSpanElement>(null);
+  useMagnetic(logoRef, 0.25);
+  useMagnetic(resumeRef, 0.3);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +56,7 @@ export function Navbar() {
         first.focus();
       }
     };
-    const desktop = window.matchMedia("(min-width: 1024px)");
+    const desktop = window.matchMedia("(min-width: 1280px)");
     const onDesktop = () => desktop.matches && close(false);
 
     document.addEventListener("keydown", onKey);
@@ -63,107 +70,115 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300 ${
-        scrolled || open
-          ? "border-b border-line bg-bg/75 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent"
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-300 ${
+        scrolled || open ? "border-b border-line bg-bg/95" : "border-b border-transparent bg-bg/0"
       }`}
     >
-      <nav className="container-page flex h-[4.25rem] items-center justify-between gap-6" aria-label="Main">
-        <a href="#top" className="group flex items-center gap-3 rounded-lg" aria-label={`${profile.name}, back to top`}>
-          <span className="grid size-9 place-items-center rounded-[10px] border border-accent/40 bg-accent/5 font-mono text-[0.78rem] font-medium text-accent transition-colors group-hover:bg-accent/10">
-            {profile.initials}
+      <nav className="container-page flex h-[4.5rem] items-center justify-between gap-6" aria-label="Main">
+        <a ref={logoRef} href="#top" className="group flex items-center gap-3" aria-label={`${profile.name}, back to top`}>
+          <span aria-hidden="true" className="nav-coin">
+            gk
           </span>
-          <span className="hidden font-display text-[0.98rem] font-semibold tracking-tight sm:inline">{profile.name}</span>
+          <span className="hidden text-[0.95rem] font-medium tracking-tight sm:inline">{profile.name}</span>
         </a>
 
-        <ul className="hidden items-center gap-1 lg:flex">
+        {/* Recessed tray of keys: a raised key slides to the hovered link and presses on click;
+            the section you are reading gets a small indicator light. */}
+        <ul className="nav-dock hidden xl:flex" onPointerLeave={() => setHovered(null)}>
           {navItems.map((item) => {
             const isActive = active === item.id;
+            const showKey = (hovered ?? active) === item.id;
             return (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
                   aria-current={isActive ? "true" : undefined}
-                  className={`group relative block rounded-full px-3.5 py-2 text-[0.9rem] transition-colors ${
-                    isActive ? "text-ink" : "text-muted hover:text-ink"
-                  }`}
+                  aria-label={item.label}
+                  onPointerEnter={() => setHovered(item.id)}
+                  onFocus={() => setHovered(item.id)}
+                  onBlur={() => setHovered(null)}
+                  className={`nav-link ${isActive ? "text-ink" : "text-muted hover:text-ink"}`}
                 >
-                  {item.label}
-                  <span
-                    aria-hidden="true"
-                    className={`absolute inset-x-3.5 -bottom-0.5 h-px origin-left bg-accent transition-transform duration-500 ease-[var(--ease-out-expo)] ${
-                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                    }`}
-                  />
+                  {showKey && (
+                    <motion.span
+                      layoutId="nav-key"
+                      aria-hidden="true"
+                      className="nav-key"
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span className="nav-index relative font-mono text-[0.72rem]">{item.index}</span>
+                  {/* Label rolls up on hover to reveal an accent copy of itself. */}
+                  <span className="nav-roll relative">
+                    <span data-text={item.label}>{item.label}</span>
+                  </span>
+                  <span aria-hidden="true" className={`nav-led ${isActive ? "is-on" : ""}`} />
                 </a>
               </li>
             );
           })}
         </ul>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <ThemeToggle />
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub profile (opens in a new tab)"
-            className="hidden size-10 place-items-center rounded-full text-muted transition-colors hover:bg-white/5 hover:text-ink sm:grid"
-          >
-            <GitHubIcon />
-          </a>
-          <a href={profile.resume} download={profile.resumeFileName} className="btn btn-ghost hidden !min-h-10 !px-4 !text-[0.85rem] sm:inline-flex">
-            <Download size={15} aria-hidden="true" className="arrow-d" />
-            Resume
-          </a>
+          <span ref={resumeRef} className="hidden sm:block">
+            <PushButton href={profile.resume} download={profile.resumeFileName} variant="key" className="push--sm">
+              Résumé <Download size={15} aria-hidden="true" className="arrow-d" />
+            </PushButton>
+          </span>
+          <span className="xl:hidden">
           <button
             ref={toggleRef}
             type="button"
-            className="grid size-11 place-items-center rounded-full border border-line-strong text-ink transition-colors hover:border-accent/50 lg:hidden"
+            className="push push--key push--sm"
             aria-expanded={open}
             aria-controls="mobile-menu"
-            aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+            <span aria-hidden="true" className="push__shadow" />
+            <span aria-hidden="true" className="push__edge" />
+            <span className="push__front">
+              {open ? "Close" : "Menu"}
+              <span aria-hidden="true" className="relative block h-3 w-4">
+                <span className={`absolute left-0 h-px w-4 bg-current transition-transform duration-300 ${open ? "top-1.5 rotate-45" : "top-0.5"}`} />
+                <span className={`absolute left-0 h-px w-4 bg-current transition-transform duration-300 ${open ? "top-1.5 -rotate-45" : "top-2.5"}`} />
+              </span>
+            </span>
           </button>
+          </span>
         </div>
       </nav>
 
-      <div
-        id="mobile-menu"
-        ref={panelRef}
-        hidden={!open}
-        className="h-[calc(100dvh-4.25rem)] overflow-y-auto border-t border-line bg-bg/95 backdrop-blur-xl lg:hidden"
-      >
+      <div id="mobile-menu" ref={panelRef} hidden={!open} className="h-[calc(100dvh-4.5rem)] overflow-y-auto bg-bg xl:hidden">
         <div className="container-page flex min-h-full flex-col py-6">
-          <ul className="flex flex-col">
-            {navItems.map((item, i) => (
+          <ul className="flex flex-col border-t border-ink">
+            {navItems.map((item) => (
               <li key={item.id} className="border-b border-line">
                 <a
                   href={`#${item.id}`}
                   onClick={() => close(false)}
                   aria-current={active === item.id ? "true" : undefined}
-                  className={`flex items-baseline gap-4 py-4 font-display text-2xl font-medium tracking-tight transition-colors ${
-                    active === item.id ? "text-accent" : "text-ink hover:text-accent"
+                  className={`flex items-baseline gap-4 py-4 font-serif text-[2rem] leading-tight transition-colors ${
+                    active === item.id ? "text-accent-ink italic" : "text-ink hover:text-accent-ink"
                   }`}
                 >
-                  <span className="font-mono text-xs text-subtle">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-mono text-[0.82rem] text-muted not-italic">Nº {item.index}</span>
                   {item.label}
                 </a>
               </li>
             ))}
           </ul>
-          <div className="mt-auto flex flex-wrap gap-3 pt-8">
-            <a href={profile.resume} download={profile.resumeFileName} className="btn btn-primary" onClick={() => close(false)}>
-              <Download size={16} aria-hidden="true" /> Download resume
+          <div className="mt-auto flex flex-wrap gap-x-6 gap-y-2 pt-8">
+            <PushButton href={profile.resume} download={profile.resumeFileName} variant="primary" className="!block w-full [&>.push__front]:justify-center" onClick={() => close(false)}>
+              Download résumé <Download size={17} aria-hidden="true" className="arrow-d" />
+            </PushButton>
+            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="link-arrow">
+              GitHub <ArrowUpRight size={15} aria-hidden="true" className="arrow-ur" />
+              <span className="sr-only">(opens in a new tab)</span>
             </a>
-            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" aria-label="GitHub (opens in a new tab)">
-              <GitHubIcon size={16} /> GitHub
-            </a>
-            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" aria-label="LinkedIn (opens in a new tab)">
-              <LinkedInIcon size={16} /> LinkedIn
+            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="link-arrow">
+              LinkedIn <ArrowUpRight size={15} aria-hidden="true" className="arrow-ur" />
+              <span className="sr-only">(opens in a new tab)</span>
             </a>
           </div>
         </div>

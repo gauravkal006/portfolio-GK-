@@ -14,7 +14,5 @@ export const finePointer = () =>
 
 export { gsap, ScrollTrigger, useGSAP };
 
-/** Preloader timing (seconds). The hero intro starts as the loader curtain lifts. */
-export const PRELOAD_HOLD = 0.5;
-export const PRELOAD_EXIT = 0.45;
-export const INTRO_DELAY = PRELOAD_HOLD + PRELOAD_EXIT * 0.6;
+/** Delay (seconds) before the hero intro plays. Kept short: content is never held back. */
+export const INTRO_DELAY = 0.1;
