@@ -2,6 +2,7 @@ import { MotionConfig } from "motion/react";
 import { AboutSection } from "./components/AboutSection";
 import { BackToTop } from "./components/BackToTop";
 import { ContactSection } from "./components/ContactSection";
+import { CursorEffect } from "./components/CursorEffect";
 import { ExperienceSection } from "./components/ExperienceSection";
 import { FeaturedProjects } from "./components/FeaturedProjects";
 import { GalaxyBackground } from "./components/GalaxyBackground";
@@ -11,6 +12,7 @@ import { HeroSection } from "./components/HeroSection";
 import { IntroScreen } from "./components/IntroScreen";
 import { Navbar } from "./components/Navbar";
 import { ResumeSection } from "./components/ResumeSection";
+import { ResumeViewer } from "./components/ResumeViewer";
 import { ScrollProgress } from "./components/ScrollProgress";
 import { SkillsSection } from "./components/SkillsSection";
 
@@ -38,7 +40,9 @@ export default function App() {
         <ContactSection />
       </main>
       <Footer />
+      <ResumeViewer />
       <BackToTop />
+      <CursorEffect />
     </MotionConfig>
   );
 }

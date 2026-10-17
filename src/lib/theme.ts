@@ -2,7 +2,7 @@ import { useCallback, useSyncExternalStore } from "react";
 
 export type Theme = "dark" | "light";
 const KEY = "theme";
-const THEME_COLOR: Record<Theme, string> = { dark: "#060814", light: "#ffffff" };
+const THEME_COLOR: Record<Theme, string> = { dark: "#232120", light: "#ffffff" };
 
 const read = (): Theme => (document.documentElement.dataset.theme === "dark" ? "dark" : "light");
 

@@ -4,8 +4,8 @@
   Design tokens.
   Day: a clean white page, near-black ink, burnt orange for interaction; olive, mustard and
   slate appear only in illustrations and small markers.
-  Galaxy (data-theme="dark"): deep-space navy behind a live starfield, pale starlight text,
-  with the accent warmed up so it glows against the dark.
+  Warm ash (data-theme="dark"): a warm brown-gray, never pure black, with soft parchment text,
+  a faint starfield, and the accent warmed up so it reads against the dark.
   `accent` is for fills and large type; `accent-ink` is the shade for small text (4.5:1+).
   `cover` / `cover-ink` paint the closing "back cover" (contact + footer).
 */
@@ -41,27 +41,27 @@
   --card-shadow-hover: 0 2px 4px rgb(16 17 20 / 0.06), 0 24px 48px -20px rgb(16 17 20 / 0.28);
 }
 
-/* Galaxy edition. */
+/* Warm ash edition. */
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --color-bg: #060814;
-  --color-paper: #0d1226;
-  --color-paper-2: #141a33;
-  --color-line: #20274a;
-  --color-line-strong: #3a4373;
-  --color-ink: #eceefa;
-  --color-muted: #a3a9cc;
-  --color-accent: #ff8a65;
-  --color-accent-ink: #ffa184;
-  --color-accent-inv: #ffa184;
-  --color-olive: #7fd1bd;
-  --color-mustard: #f6c86b;
-  --color-slate: #8ea8ff;
-  --color-danger: #ff9a86;
-  --color-cover: rgb(10 14 34 / 0.72);
-  --color-cover-ink: #eceefa;
-  --card-shadow: 0 0 0 1px rgb(142 168 255 / 0.10), 0 12px 32px -16px rgb(0 0 0 / 0.8);
-  --card-shadow-hover: 0 0 0 1px rgb(142 168 255 / 0.28), 0 24px 60px -20px rgb(110 120 255 / 0.35);
+  --color-bg: #232120;
+  --color-paper: #2a2725;
+  --color-paper-2: #322e2b;
+  --color-line: #3d3935;
+  --color-line-strong: #57514b;
+  --color-ink: #f0ebe3;
+  --color-muted: #b3aba1;
+  --color-accent: #e8875d;
+  --color-accent-ink: #f29b74;
+  --color-accent-inv: #f29b74;
+  --color-olive: #aab27f;
+  --color-mustard: #e3ba61;
+  --color-slate: #93acb8;
+  --color-danger: #f29a86;
+  --color-cover: #1b1918;
+  --color-cover-ink: #f0ebe3;
+  --card-shadow: 0 0 0 1px rgb(255 236 214 / 0.06), 0 12px 32px -16px rgb(0 0 0 / 0.7);
+  --card-shadow-hover: 0 0 0 1px rgb(255 236 214 / 0.14), 0 24px 60px -20px rgb(0 0 0 / 0.75);
 }
 
 @layer base {
@@ -250,20 +250,56 @@
 ::view-transition-old(root) { z-index: 1; }
 ::view-transition-new(root) { z-index: 2; }
 
-/* ---------- Galaxy backdrop ---------- */
+/* ---------- Dark backdrop: drifting warm light, like an ambient video loop ---------- */
 .galaxy { opacity: 0; transition: opacity 0.9s ease; }
 :root[data-theme="dark"] .galaxy { opacity: 1; }
-.galaxy__nebula {
+.ambient__blob {
   position: absolute;
-  inset: -10%;
-  background:
-    radial-gradient(38% 32% at 14% 18%, rgb(124 92 255 / 0.22), transparent 70%),
-    radial-gradient(34% 28% at 86% 26%, rgb(255 112 168 / 0.13), transparent 70%),
-    radial-gradient(44% 38% at 62% 88%, rgb(48 184 208 / 0.13), transparent 70%),
-    radial-gradient(28% 24% at 28% 68%, rgb(255 164 96 / 0.07), transparent 70%);
+  width: 62vmax;
+  height: 62vmax;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+  will-change: transform;
+}
+.ambient__blob--a {
+  top: -22vmax;
+  left: -16vmax;
+  background: radial-gradient(circle, rgb(232 135 93 / 0.32), transparent 65%);
+  animation: ambient-a 38s ease-in-out infinite alternate;
+}
+.ambient__blob--b {
+  top: 18vh;
+  right: -24vmax;
+  background: radial-gradient(circle, rgb(227 186 97 / 0.2), transparent 65%);
+  animation: ambient-b 46s ease-in-out infinite alternate;
+}
+.ambient__blob--c {
+  bottom: -30vmax;
+  left: 12vw;
+  background: radial-gradient(circle, rgb(170 178 127 / 0.16), transparent 65%);
+  animation: ambient-c 52s ease-in-out infinite alternate;
+}
+.ambient__blob--d {
+  top: 40vh;
+  left: -20vmax;
+  width: 44vmax;
+  height: 44vmax;
+  background: radial-gradient(circle, rgb(196 120 140 / 0.16), transparent 65%);
+  animation: ambient-d 34s ease-in-out infinite alternate;
+}
+@keyframes ambient-a { to { transform: translate3d(22vw, 18vh, 0) scale(1.18); } }
+@keyframes ambient-b { to { transform: translate3d(-26vw, 22vh, 0) scale(0.9); } }
+@keyframes ambient-c { to { transform: translate3d(30vw, -26vh, 0) scale(1.12); } }
+@keyframes ambient-d { to { transform: translate3d(38vw, -18vh, 0) scale(1.2); } }
+.ambient__grain {
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise);
+  opacity: 0.35;
 }
 
-/* ---------- Day / galaxy switch: skeuomorphic track and knob ----------
+/* ---------- Day / dark switch: skeuomorphic track and knob ----------
    Shading follows the classic skeuomorphism toggle: a deep recessed track with layered inset
    shadows and grain, and a raised knob with a highlight on top, shade underneath and a
    two-layer drop shadow. */
@@ -285,8 +321,8 @@
     0 0.42rem 0.33rem rgb(0 0 0 / 0.2);
 }
 :root[data-theme="dark"] {
-  --skeu-track: #1d2532;
-  --skeu-knob: #242e3e;
+  --skeu-track: #1c1a19;
+  --skeu-knob: #34302d;
   --skeu-engrave: rgb(255 255 255 / 0.5);
   --skeu-track-shadow:
     inset 0 0 2.3rem 2.3rem rgb(0 0 0 / 0.3),
@@ -516,7 +552,7 @@
   transform: translate3d(0, 0, 0.1px);
 }
 :root[data-theme="dark"] .holo {
-  --holo-face: #0c1126;
+  --holo-face: #2a2725;
   --holo-sheen-blend: screen;
   --holo-sheen-strength: 0.28;
   --holo-glow: 0.45;
@@ -560,8 +596,8 @@
   transition: transform 1s ease;
 }
 :root[data-theme="dark"] .holo__card {
-  background-image: linear-gradient(125deg, #8f6bff 0%, #4fb7ff 22%, #5fe0c0 40%, #ffd37a 58%, #ff8fb3 76%, #8f6bff 94%);
-  box-shadow: 0 0 0 1px rgb(142 168 255 / 0.15), rgb(0 0 0 / 0.6) calc(var(--pointer-from-left) * 10px - 5px) calc(var(--pointer-from-top) * 18px + 6px) 40px -10px;
+  background-image: linear-gradient(125deg, #c9a27e 0%, #e8875d 20%, #e3ba61 40%, #aab27f 58%, #93acb8 76%, #c9a27e 94%);
+  box-shadow: 0 0 0 1px rgb(255 236 214 / 0.1), rgb(0 0 0 / 0.6) calc(var(--pointer-from-left) * 10px - 5px) calc(var(--pointer-from-top) * 18px + 6px) 40px -10px;
 }
 .holo:hover .holo__card,
 .holo.is-active .holo__card {
@@ -847,8 +883,8 @@ button.push { padding: 0; border: 0; background: transparent; cursor: pointer; }
     inset 0 -0.14rem 0.14rem rgb(0 0 0 / 0.22);
 }
 :root[data-theme="dark"] .push--key {
-  --push-face: linear-gradient(180deg, #283244, #1e2634);
-  --push-edge: linear-gradient(to left, #0b0f17 0%, #121822 8%, #121822 92%, #0b0f17 100%);
+  --push-face: linear-gradient(180deg, #3a3532, #2c2927);
+  --push-edge: linear-gradient(to left, #100e0d 0%, #181615 8%, #181615 92%, #100e0d 100%);
 }
 :root[data-theme="dark"] .push--key .push__front {
   box-shadow:
@@ -909,3 +945,117 @@ button.push { padding: 0; border: 0; background: transparent; cursor: pointer; }
   transform: translateY(1px);
   box-shadow: inset 0 0.12rem 0.25rem rgb(0 0 0 / 0.25), inset 0 -0.06rem 0.06rem rgb(255 255 255 / 0.2);
 }
+
+/* Square, icon-only header key. */
+.push--icon .push__front { padding-inline: 0.75rem; }
+
+/* Ambient blobs only move while the dark theme shows them. */
+:root:not([data-theme="dark"]) .ambient__blob { animation-play-state: paused; }
+
+/* ---------- Custom cursor (see CursorEffect.tsx) ---------- */
+.cursor-dot,
+.cursor-ring,
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.cursor-visible .cursor-dot,
+.cursor-visible .cursor-ring { opacity: 1; }
+:root[data-theme="dark"].cursor-visible .cursor-glow { opacity: 1; }
+.has-custom-cursor,
+.has-custom-cursor * { cursor: none !important; }
+.has-custom-cursor input:not([type="checkbox"]):not([type="radio"]),
+.has-custom-cursor textarea { cursor: text !important; }
+
+.cursor-dot {
+  z-index: 210;
+  width: 0;
+  height: 0;
+}
+.cursor-dot::before {
+  position: absolute;
+  top: -2.5px;
+  left: -2.5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  content: "";
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  z-index: 209;
+  width: 0;
+  height: 0;
+  mix-blend-mode: difference;
+}
+.cursor-ring::before {
+  position: absolute;
+  top: -13px;
+  left: -13px;
+  width: 26px;
+  height: 26px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  content: "";
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-radius 0.3s ease, width 0.3s ease, left 0.3s ease;
+}
+.cursor-ring[data-state="hover"]::before { background: rgb(255 255 255 / 0.12); transform: scale(1.4); }
+.cursor-ring[data-state="label"]::before { background: #fff; transform: scale(2.3); }
+.cursor-ring[data-state="text"]::before { left: -1.5px; width: 3px; border-radius: 2px; transform: scaleY(0.75); }
+.cursor-ring.is-down::before { transform: scale(0.8); }
+.cursor-ring[data-state="hover"].is-down::before { transform: scale(1.15); }
+.cursor-ring__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #000;
+  font: 500 0.62rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cursor-ring[data-state="label"] .cursor-ring__label { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+/* Warm light that follows the cursor behind the content (dark theme only). */
+.cursor-glow {
+  z-index: -5;
+  width: 0;
+  height: 0;
+}
+.cursor-glow::before {
+  position: absolute;
+  top: -190px;
+  left: -190px;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(232 135 93 / 0.1), rgb(227 186 97 / 0.04) 40%, transparent 70%);
+  content: "";
+}
+
+/* ---------- On-page résumé viewer ---------- */
+.resume-sheet {
+  border: 1px solid var(--color-line);
+  border-radius: 22px;
+  background: var(--color-bg);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 40px 120px -30px rgb(0 0 0 / 0.55);
+}
+.resume-tool {
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--color-muted);
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.resume-tool:hover { background: var(--color-paper-2); color: var(--color-ink); }
+.resume-tool:active { transform: scale(0.92); }

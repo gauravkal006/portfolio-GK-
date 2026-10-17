@@ -152,6 +152,7 @@ export function ProjectCard({ project, number, featured, onOpen, ref }: CardProp
           type="button"
           aria-haspopup="dialog"
           aria-label={`Open ${project.name} details`}
+          data-cursor="Open"
           onClick={(e) => {
             reset();
             onOpen(project, e.currentTarget);

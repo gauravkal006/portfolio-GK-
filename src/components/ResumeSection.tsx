@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Download, X } from "lucide-react";
+import { Download, Eye } from "lucide-react";
 import { profile } from "../data/profile";
 import { certifications } from "../data/experience";
 import { featuredProjects } from "../data/projects";
 import { useSectionReveal } from "../hooks/useSectionReveal";
+import { viewResumeClick } from "../lib/resumeViewer";
 import { PushButton } from "./PushButton";
 import { SectionHeading } from "./SectionHeading";
 
@@ -16,10 +17,7 @@ const contents = [
 
 export function ResumeSection() {
   const ref = useRef<HTMLElement>(null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const viewRef = useRef<HTMLButtonElement>(null);
   const [available, setAvailable] = useState(true);
-  const [previewed, setPreviewed] = useState(false);
   useSectionReveal(ref);
 
   // Confirm the PDF is actually served so we never show a dead download button.
@@ -33,16 +31,6 @@ export function ResumeSection() {
     return () => controller.abort();
   }, []);
 
-  const openPreview = () => {
-    // Mobile browsers often cannot render PDFs inline; hand them the file directly.
-    const inlinePdf = (navigator as Navigator & { pdfViewerEnabled?: boolean }).pdfViewerEnabled;
-    if (inlinePdf === false || window.matchMedia("(max-width: 767px)").matches) {
-      window.open(profile.resume, "_blank", "noopener");
-      return;
-    }
-    setPreviewed(true);
-    dialogRef.current?.showModal();
-  };
 
   return (
     <section ref={ref} id="resume" aria-labelledby="resume-title" className="relative py-20 md:py-28">
@@ -71,13 +59,13 @@ export function ResumeSection() {
             </dl>
 
             {available ? (
-              <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3">
+              <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-5">
                 <PushButton href={profile.resume} download={profile.resumeFileName} variant="primary">
                   Download résumé <Download size={17} aria-hidden="true" className="arrow-d" />
                 </PushButton>
-                <button ref={viewRef} type="button" onClick={openPreview} className="link-arrow">
-                  Preview it here <ArrowUpRight size={15} aria-hidden="true" className="arrow-ur" />
-                </button>
+                <PushButton href={profile.resume} onClick={viewResumeClick} variant="key">
+                  <Eye size={17} aria-hidden="true" /> View résumé
+                </PushButton>
               </div>
             ) : (
               <p role="status" className="mt-8 max-w-lg border-l-2 border-accent pl-4 text-[0.95rem] text-muted">
@@ -113,29 +101,6 @@ export function ResumeSection() {
         </div>
       </div>
 
-      <dialog
-        ref={dialogRef}
-        aria-labelledby="resume-dialog-title"
-        onClick={(e) => e.target === dialogRef.current && dialogRef.current?.close()}
-        onClose={() => viewRef.current?.focus()}
-        className="m-auto h-[min(90dvh,900px)] w-[min(920px,calc(100%-2rem))] max-w-none overflow-hidden border border-ink bg-bg p-0 text-ink backdrop:bg-ink/70 open:grid open:grid-rows-[auto_minmax(0,1fr)]"
-      >
-        <div className="flex items-center justify-between gap-3 border-b border-ink px-4 py-2 sm:px-5">
-          <h2 id="resume-dialog-title" className="label !text-ink">Résumé preview</h2>
-          <div className="flex items-center gap-1">
-            <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="link-arrow px-2 text-sm">
-              Open in new tab <ArrowUpRight size={15} aria-hidden="true" className="arrow-ur" />
-            </a>
-            <a href={profile.resume} download={profile.resumeFileName} className="grid size-10 place-items-center text-muted transition-colors hover:text-accent-ink" aria-label="Download résumé">
-              <Download size={17} aria-hidden="true" />
-            </a>
-            <button type="button" onClick={() => dialogRef.current?.close()} className="grid size-10 place-items-center text-muted transition-colors hover:text-accent-ink" aria-label="Close preview">
-              <X size={18} aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-        {previewed && <iframe src={`${profile.resume}#view=FitH`} title="Gaurav Kalamkhede résumé (PDF)" className="h-full w-full border-0 bg-[#fff]" />}
-      </dialog>
     </section>
   );
 }

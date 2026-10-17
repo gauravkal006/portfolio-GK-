@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { ArrowUpRight, Download } from "lucide-react";
+import { ArrowUpRight, Download, Eye } from "lucide-react";
 import { navItems, profile } from "../data/profile";
 import { useActiveSection } from "../hooks/useActiveSection";
 import { useMagnetic } from "../hooks/useMagnetic";
+import { viewResumeClick } from "../lib/resumeViewer";
 import { PushButton } from "./PushButton";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -79,7 +80,7 @@ export function Navbar() {
           <span aria-hidden="true" className="nav-coin">
             gk
           </span>
-          <span className="hidden text-[0.95rem] font-medium tracking-tight sm:inline">{profile.name}</span>
+          <span className="hidden text-[0.95rem] font-medium tracking-tight sm:inline xl:hidden 2xl:inline">{profile.name}</span>
         </a>
 
         {/* Recessed tray of keys: a raised key slides to the hovered link and presses on click;
@@ -121,9 +122,19 @@ export function Navbar() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <span ref={resumeRef} className="hidden sm:block">
-            <PushButton href={profile.resume} download={profile.resumeFileName} variant="key" className="push--sm">
-              Résumé <Download size={15} aria-hidden="true" className="arrow-d" />
+          <span ref={resumeRef} className="hidden items-center gap-2 sm:flex">
+            <PushButton href={profile.resume} onClick={viewResumeClick} variant="key" className="push--sm" aria-haspopup="dialog">
+              <Eye size={16} aria-hidden="true" /> View résumé
+            </PushButton>
+            <PushButton
+              href={profile.resume}
+              download={profile.resumeFileName}
+              variant="key"
+              className="push--sm push--icon"
+              aria-label="Download résumé (PDF)"
+              title="Download résumé"
+            >
+              <Download size={16} aria-hidden="true" className="arrow-d" />
             </PushButton>
           </span>
           <span className="xl:hidden">
@@ -171,6 +182,18 @@ export function Navbar() {
           <div className="mt-auto flex flex-wrap gap-x-6 gap-y-2 pt-8">
             <PushButton href={profile.resume} download={profile.resumeFileName} variant="primary" className="!block w-full [&>.push__front]:justify-center" onClick={() => close(false)}>
               Download résumé <Download size={17} aria-hidden="true" className="arrow-d" />
+            </PushButton>
+            <PushButton
+              href={profile.resume}
+              onClick={(e) => {
+                close(false);
+                viewResumeClick(e);
+              }}
+              variant="key"
+              aria-haspopup="dialog"
+              className="!block w-full [&>.push__front]:justify-center"
+            >
+              <Eye size={17} aria-hidden="true" /> View résumé
             </PushButton>
             <a href={profile.github} target="_blank" rel="noopener noreferrer" className="link-arrow">
               GitHub <ArrowUpRight size={15} aria-hidden="true" className="arrow-ur" />
